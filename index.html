@@ -980,122 +980,59 @@ footer .col a:hover { color: white; }
 </div>
 
 <script>
-function toggleLia() {
-  document.getElementById("lia-window").classList.toggle("open");
-}
+window.toggleLia = function() {
+  const janela = document.getElementById("lia-window");
+  if (janela) janela.classList.toggle("open");
+};
 
-function liaAdicionar(autor, texto) {
+window.liaAdicionar = function(tipo, texto) {
   const area = document.getElementById("lia-body");
-  const div = document.createElement("div");
-  div.className = "lia-msg " + (autor === "user" ? "user" : "bot");
-  div.textContent = texto;
-  area.appendChild(div);
+  if (!area) return;
+
+  const mensagem = document.createElement("div");
+  mensagem.className = "lia-msg " + (tipo === "user" ? "user" : "bot");
+  mensagem.textContent = texto;
+  area.appendChild(mensagem);
   area.scrollTop = area.scrollHeight;
-}
+};
 
-function enviarLia() {
-  // ===================================================
-// CONFIGURAÇÃO DA IA PARA A LIA
-// ALTERE PELA SUA CHAVE DE API
-// ===================================================
-const GEMINI_API_KEY = "";
-
-async function enviarLia() {
+window.enviarLia = function() {
   const campo = document.getElementById("lia-input");
+  if (!campo) return;
+
   const texto = campo.value.trim();
   if (!texto) return;
 
-  liaAdicionar("user", texto);
+  window.liaAdicionar("user", texto);
   campo.value = "";
 
-  // Mostrar "digitando..."
-  const typingDiv = document.createElement("div");
-  typingDiv.className = "lia-msg bot";
-  typingDiv.id = "lia-typing";
-  typingDiv.textContent = "LIA está pensando...";
-  document.getElementById("lia-body").appendChild(typingDiv);
-  document.getElementById("lia-body").scrollTop =
-    document.getElementById("lia-body").scrollHeight;
+  const pergunta = texto
+    .toLowerCase()
+    .normalize("NFD")
+    .replace(/[\u0300-\u036f]/g, "");
 
-  // Montar o contexto para a IA
-  const contextoSistema =
-    "Você é a LIA, assistente virtual da Leandro AP Engenharia Elétrica AD. " +
-    "Atenda clientes que precisam de laudos técnicos, inspeções, SPDA, " +
-    "projetos elétricos e consultoria. " +
-    "Atuamos na Grande São Paulo. " +
-    "Responsável: Eng. Leandro Aparecido Pereira Paes, Engenheiro Eletricista. " +
-    "WhatsApp: (11) 93044-1562. " +
-    "Não invente preços — diga que o orçamento depende do tipo de serviço " +
-    "e das características da instalação, e sugira contato pelo WhatsApp. " +
-    "Responda em português do Brasil, de forma profissional mas amigável. " +
-    "Se a conversa for sobre algo técnico muito específico, diga que o " +
-    "engenheiro responderá diretamente. Seja curta e objetiva.";
+  let resposta;
 
-  try {
-    const resposta = await fetch(
-      "https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=" +
-      GEMINI_API_KEY,
-      {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          contents: [
-            {
-              parts: [
-                {
-                  text:
-                    contextoSistema +
-                    "\n\nHistórico da conversa:\n" +
-                    document.getElementById("lia-body").innerText +
-                    "\n\nResponda apenas como a LIA:"
-                }
-              ]
-            }
-          ]
-        })
-      }
-    );
-
-    const resultado = await resposta.json();
-
-    // Remover "digitando..."
-    const typing = document.getElementById("lia-typing");
-    if (typing) typing.remove();
-
-    if (resultado.candidates && resultado.candidates[0]) {
-      const respostaTexto =
-        resultado.candidates[0].content.parts[0].text;
-      liaAdicionar("bot", respostaTexto);
-    } else {
-      liaAdicionar("bot",
-        "Não consegui processar sua mensagem. Para atendimento imediato, " +
-        "fale pelo WhatsApp (11) 93044-1562.");
-    }
-
-  } catch (erro) {
-    // Remover "digitando..."
-    const typing = document.getElementById("lia-typing");
-    if (typing) typing.remove();
-
-    // Resposta offline (fallback)
-    const t = texto.toLowerCase();
-    let offline;
-
-    if (t.includes("spda") || t.includes("raio")) {
-      offline = "Realizamos laudos de SPDA conforme NBR 5419. O imóvel é residencial, comercial ou industrial?";
-    } else if (t.includes("laudo")) {
-      offline = "Trabalhamos com laudos de instalações, SPDA, NR-10 e perícias. Qual é o tipo de imóvel?";
-    } else if (t.includes("preç") || t.includes("orçament") || t.includes("valor")) {
-      offline = "O valor depende do serviço. Posso encaminhar ao engenheiro pelo WhatsApp (11) 93044-1562.";
-    } else {
-      offline = "Estou com dificuldade de conexão. Fale pelo WhatsApp (11) 93044-1562 para atendimento imediato.";
-    }
-
-    liaAdicionar("bot", offline);
+  if (pergunta.includes("spda") || pergunta.includes("para-raio")) {
+    resposta = "Posso registrar seu interesse em uma inspeção de SPDA. Qual é o tipo de imóvel e em qual cidade fica?";
+  } else if (pergunta.includes("orcamento") || pergunta.includes("preco") || pergunta.includes("valor")) {
+    resposta = "O valor depende do serviço e das características do imóvel. Para solicitar uma avaliação, use o botão de WhatsApp do site.";
+  } else if (pergunta.includes("agendar") || pergunta.includes("visita")) {
+    resposta = "A agenda ainda não está conectada ao site. Para solicitar uma visita, informe a cidade e o serviço pelo WhatsApp.";
+  } else if (pergunta.includes("nr-10") || pergunta.includes("nr10")) {
+    resposta = "Posso encaminhar sua solicitação sobre NR-10. É para uma residência, empresa, condomínio ou indústria?";
+  } else if (pergunta.includes("projeto")) {
+    resposta = "Para solicitar um projeto elétrico, informe o tipo de imóvel e a cidade pelo WhatsApp.";
+  } else if (pergunta.includes("laudo") || pergunta.includes("inspec")) {
+    resposta = "Trabalhamos com solicitações de laudos e inspeções. Qual serviço você precisa e onde fica o imóvel?";
+  } else {
+    resposta = "Posso ajudar com informações iniciais sobre laudos, SPDA, NR-10, projetos e visitas. Para uma avaliação técnica, fale diretamente com o engenheiro pelo WhatsApp.";
   }
- }
-}
-</script>
 
+  window.setTimeout(function() {
+    window.liaAdicionar("bot", resposta);
+  }, 300);
+};
+</script>
 </body>
 </html>
