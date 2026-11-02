@@ -1169,7 +1169,7 @@
           currentUser = data.session.user;
           await showApp();
         }
-      } catch (error) {
+      } catch (alert) {
         console.error(error);
         $("setup-warning").textContent =
           "Não foi possível iniciar a conexão com o Supabase. Confira a URL, a chave pública e a conexão.";
@@ -1195,7 +1195,7 @@
 
         currentUser = data.user;
         await showApp();
-      } catch (error) {
+      } catch (alert) {
         console.error(error);
         setLoginError("Não foi possível entrar. Confira o e-mail e a senha e tente novamente.");
       } finally {
