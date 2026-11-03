@@ -1,3 +1,19 @@
+Site novo
+gpt-6-luna-max
+Sim. Abaixo está um **`admin.html` completo**, feito do zero e compatível com as tabelas e políticas que você já configurou no Supabase:
+
+- `clientes`
+- `inspecoes`
+- `fotos`
+- coluna `owner_id` nas três tabelas
+
+O painel inclui login Supabase, cadastro/listagem de clientes, criação/edição de inspeções, medições, fotos em armazenamento privado e impressão de relatório em PDF. O relatório sempre sai identificado como **rascunho**, para revisão técnica.
+
+## 1. Crie o arquivo `admin.html`
+
+No Acode, crie `admin.html` e cole o código inteiro abaixo. Substitua somente a URL e a chave indicadas no começo do JavaScript.
+
+```html
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
@@ -992,8 +1008,8 @@
       Use a Project URL e a chave pública publishable/anon do Supabase.
       NUNCA use service_role, sb_secret ou senha do banco neste arquivo.
     */
-    const SUPABASE_URL = "https://xphlabwpflvlctvyglfv.supabase.co/rest/v1/";
-    const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InhwaGxhYndwZmx2bGN0dnlnbGZ2Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTM1MzY2MDIsImV4cCI6MjEwOTExMjYwMn0.62q63EaJXuYcu7Rp-HFQDQYMivs1e-oisjf9c5r8Tcs";
+    const SUPABASE_URL = "COLE_A_PROJECT_URL_AQUI";
+    const SUPABASE_ANON_KEY = "COLE_A_CHAVE_PUBLICA_ANON_OU_PUBLISHABLE_AQUI";
     const STORAGE_BUCKET = "laudos-fotos";
 
     let supabaseClient = null;
@@ -1169,7 +1185,7 @@
           currentUser = data.session.user;
           await showApp();
         }
-      } catch (alert) {
+      } catch (error) {
         console.error(error);
         $("setup-warning").textContent =
           "Não foi possível iniciar a conexão com o Supabase. Confira a URL, a chave pública e a conexão.";
@@ -1195,8 +1211,12 @@
 
         currentUser = data.user;
         await showApp();
-      } catch (alert) {
-        console.error(error);
+      } catch (error) {
+        if (error) {
+        console.error("Erro no login do Supabase:", error);
+        alert("Detalhe do erro: " + (error.message || String(error)));
+        return;
+        }
         setLoginError("Não foi possível entrar. Confira o e-mail e a senha e tente novamente.");
       } finally {
         button.disabled = false;
@@ -1869,3 +1889,85 @@
   </script>
 </body>
 </html>
+```
+
+## 2. Configure as credenciais públicas do Supabase
+
+No código, localize:
+
+```javascript
+const SUPABASE_URL = "COLE_A_PROJECT_URL_AQUI";
+const SUPABASE_ANON_KEY = "COLE_A_CHAVE_PUBLICA_ANON_OU_PUBLISHABLE_AQUI";
+```
+
+Substitua pelos valores do seu projeto, encontrados em **Supabase → Project Settings → API** ou **Connect**.
+
+Use somente a **chave pública `publishable` ou `anon`**. Não use `service_role`, `sb_secret` nem a senha do banco. As chaves públicas podem estar visíveis no código de um site estático; a proteção dos registros depende das políticas RLS que você já configurou.
+
+## 3. Configure o armazenamento privado das fotos
+
+O cadastro de clientes e inspeções funciona sem armazenamento de fotos. Para ativar as fotos, crie um bucket privado chamado `laudos-fotos` e execute este SQL no Supabase. Ele cria as regras para cada usuário acessar somente arquivos dentro da própria pasta:
+
+```sql
+insert into storage.buckets
+  (id, name, public, file_size_limit, allowed_mime_types)
+values
+  (
+    'laudos-fotos',
+    'laudos-fotos',
+    false,
+    10485760,
+    array['image/jpeg', 'image/png', 'image/webp', 'image/gif']
+  )
+on conflict (id) do update
+set
+  public = false,
+  file_size_limit = 10485760,
+  allowed_mime_types =
+    array['image/jpeg', 'image/png', 'image/webp', 'image/gif'];
+
+drop policy if exists "laudos_fotos_select_own" on storage.objects;
+drop policy if exists "laudos_fotos_insert_own" on storage.objects;
+drop policy if exists "laudos_fotos_update_own" on storage.objects;
+drop policy if exists "laudos_fotos_delete_own" on storage.objects;
+
+create policy "laudos_fotos_select_own"
+on storage.objects
+for select
+to authenticated
+using (
+  bucket_id = 'laudos-fotos'
+  and (storage.foldername(name))[1] = (select auth.uid()::text)
+);
+
+create policy "laudos_fotos_insert_own"
+on storage.objects
+for insert
+to authenticated
+with check (
+  bucket_id = 'laudos-fotos'
+  and (storage.foldername(name))[1] = (select auth.uid()::text)
+);
+
+create policy "laudos_fotos_update_own"
+on storage.objects
+for update
+to authenticated
+using (
+  bucket_id = 'laudos-fotos'
+  and (storage.foldername(name))[1] = (select auth.uid()::text)
+)
+with check (
+  bucket_id = 'laudos-fotos'
+  and (storage.foldername(name))[1] = (select auth.uid()::text)
+);
+
+create policy "laudos_fotos_delete_own"
+on storage.objects
+for delete
+to authenticated
+using (
+  bucket_id = 'laudos-fotos'
+  and (storage.foldername(name))[1] = (select auth.uid()::text)
+);
+```
