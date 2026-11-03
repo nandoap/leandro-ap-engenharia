@@ -1,1875 +1,556 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="theme-color" content="#123B54">
-  <title>Painel Técnico | Leandro AP Engenharia</title>
-
-  <!-- SDK oficial do Supabase -->
-  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-
-  <style>
-    :root {
-      --navy: #123B54;
-      --blue: #168AAD;
-      --blue-light: #EAF5FA;
-      --green: #198754;
-      --red: #B42318;
-      --orange: #9A3412;
-      --bg: #F4F7FA;
-      --surface: #FFFFFF;
-      --text: #243746;
-      --muted: #667788;
-      --border: #DCE5EB;
-    }
-
-    * { box-sizing: border-box; }
-
-    [hidden] { display: none !important; }
-
-    body {
-      margin: 0;
-      background: var(--bg);
-      color: var(--text);
-      font-family: Arial, Helvetica, sans-serif;
-      line-height: 1.5;
-    }
-
-    button, input, select, textarea {
-      font: inherit;
-    }
-
-    button, a {
-      -webkit-tap-highlight-color: transparent;
-    }
-
-    .login-screen {
-      min-height: 100vh;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      padding: 20px;
-      background: linear-gradient(135deg, #0E2F45, #168AAD);
-    }
-
-    .login-card {
-      background: white;
-      width: 100%;
-      max-width: 420px;
-      padding: 30px;
-      border-radius: 16px;
-      box-shadow: 0 18px 50px #00152255;
-    }
-
-    .login-logo {
-      width: 56px;
-      height: 56px;
-      border-radius: 14px;
-      background: var(--navy);
-      color: white;
-      display: grid;
-      place-items: center;
-      font-size: 26px;
-      margin: 0 auto 14px;
-    }
-
-    .login-card h1 {
-      text-align: center;
-      color: var(--navy);
-      font-size: 20px;
-      margin: 0;
-    }
-
-    .login-card .subtitle {
-      text-align: center;
-      color: var(--muted);
-      font-size: 13px;
-      margin: 6px 0 22px;
-    }
-
-    .setup-warning {
-      background: #FFF7ED;
-      color: var(--orange);
-      border: 1px solid #FDBA74;
-      border-radius: 8px;
-      padding: 12px;
-      margin-bottom: 16px;
-      font-size: 13px;
-    }
-
-    .login-error {
-      color: var(--red);
-      font-size: 13px;
-      margin-top: 12px;
-    }
-
-    .app-header {
-      background: var(--navy);
-      color: white;
-      padding: 12px 5%;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      gap: 14px;
-      flex-wrap: wrap;
-    }
-
-    .brand {
-      display: flex;
-      align-items: center;
-      gap: 11px;
-    }
-
-    .brand-mark {
-      width: 42px;
-      height: 42px;
-      border-radius: 11px;
-      background: white;
-      color: var(--navy);
-      display: grid;
-      place-items: center;
-      font-size: 17px;
-      font-weight: 800;
-    }
-
-    .brand h1 {
-      font-size: 15px;
-      margin: 0;
-    }
-
-    .brand small {
-      display: block;
-      color: #B5E2FA;
-      font-size: 11px;
-    }
-
-    .header-right {
-      display: flex;
-      align-items: center;
-      gap: 12px;
-      flex-wrap: wrap;
-    }
-
-    #user-email {
-      font-size: 12px;
-      color: #D9EEF6;
-      overflow-wrap: anywhere;
-    }
-
-    .tabs {
-      position: sticky;
-      top: 0;
-      z-index: 10;
-      display: flex;
-      overflow-x: auto;
-      background: white;
-      border-bottom: 1px solid var(--border);
-    }
-
-    .tab-btn {
-      flex: 1;
-      min-width: 115px;
-      padding: 13px 12px;
-      background: white;
-      border: 0;
-      border-bottom: 3px solid transparent;
-      color: var(--muted);
-      cursor: pointer;
-      font-weight: 700;
-      white-space: nowrap;
-    }
-
-    .tab-btn.active {
-      color: var(--blue);
-      border-bottom-color: var(--blue);
-    }
-
-    main {
-      max-width: 1120px;
-      margin: 22px auto;
-      padding: 0 16px 60px;
-    }
-
-    .tab-pane { display: none; }
-    .tab-pane.active { display: block; }
-
-    .card {
-      background: var(--surface);
-      border: 1px solid #E7EDF1;
-      border-radius: 12px;
-      padding: 20px;
-      margin-bottom: 18px;
-      box-shadow: 0 3px 12px #102A3A0A;
-    }
-
-    .card h2 {
-      color: var(--navy);
-      font-size: 18px;
-      margin: 0 0 16px;
-    }
-
-    .card h3 {
-      color: var(--navy);
-      font-size: 15px;
-      margin: 0 0 10px;
-    }
-
-    .muted {
-      color: var(--muted);
-      font-size: 13px;
-    }
-
-    .grid-2, .grid-3, .kpis {
-      display: grid;
-      gap: 14px;
-    }
-
-    .grid-2 { grid-template-columns: repeat(2, minmax(0, 1fr)); }
-    .grid-3 { grid-template-columns: repeat(3, minmax(0, 1fr)); }
-
-    .kpis {
-      grid-template-columns: repeat(2, minmax(0, 1fr));
-      margin-bottom: 18px;
-    }
-
-    .kpi {
-      background: white;
-      border: 1px solid var(--border);
-      border-left: 5px solid var(--blue);
-      border-radius: 10px;
-      padding: 16px;
-    }
-
-    .kpi span {
-      display: block;
-      color: var(--muted);
-      font-size: 12px;
-      font-weight: 700;
-    }
-
-    .kpi strong {
-      display: block;
-      color: var(--navy);
-      font-size: 25px;
-      margin-top: 4px;
-    }
-
-    .field { margin-bottom: 14px; }
-
-    .field label {
-      display: block;
-      color: #34495E;
-      font-size: 13px;
-      font-weight: 700;
-      margin-bottom: 5px;
-    }
-
-    input, select, textarea {
-      width: 100%;
-      padding: 11px 12px;
-      border: 1px solid #C8D4DC;
-      border-radius: 8px;
-      background: white;
-      color: var(--text);
-    }
-
-    input:focus, select:focus, textarea:focus {
-      outline: 2px solid #168AAD33;
-      border-color: var(--blue);
-    }
-
-    textarea {
-      min-height: 100px;
-      resize: vertical;
-    }
-
-    .button-row {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 9px;
-      align-items: center;
-    }
-
-    .btn {
-      min-height: 42px;
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      gap: 7px;
-      padding: 10px 15px;
-      border: 0;
-      border-radius: 8px;
-      background: var(--blue);
-      color: white;
-      font-weight: 700;
-      text-decoration: none;
-      cursor: pointer;
-    }
-
-    .btn:hover { filter: brightness(.95); }
-    .btn:disabled { opacity: .55; cursor: not-allowed; }
-    .btn-dark { background: var(--navy); }
-    .btn-green { background: var(--green); }
-    .btn-light { background: #EAF1F5; color: var(--navy); }
-    .btn-red { background: var(--red); }
-    .btn-small { min-height: 34px; padding: 7px 10px; font-size: 12px; }
-
-    .table-wrap {
-      overflow-x: auto;
-      width: 100%;
-    }
-
-    table {
-      width: 100%;
-      min-width: 600px;
-      border-collapse: collapse;
-      font-size: 13px;
-    }
-
-    th, td {
-      padding: 11px 9px;
-      border-bottom: 1px solid #E8EEF2;
-      text-align: left;
-      vertical-align: top;
-    }
-
-    th {
-      background: #F7FAFC;
-      color: #526273;
-    }
-
-    .notice {
-      background: var(--blue-light);
-      border: 1px solid #B6DCEB;
-      color: var(--navy);
-      border-radius: 8px;
-      padding: 12px;
-      font-size: 13px;
-      margin-bottom: 14px;
-    }
-
-    .photo-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(145px, 1fr));
-      gap: 12px;
-      margin-top: 12px;
-    }
-
-    .photo-card {
-      background: white;
-      border: 1px solid var(--border);
-      border-radius: 9px;
-      overflow: hidden;
-    }
-
-    .photo-card img {
-      display: block;
-      width: 100%;
-      height: 125px;
-      object-fit: cover;
-      background: #EDF2F5;
-    }
-
-    .photo-card p {
-      margin: 0;
-      padding: 8px;
-      font-size: 12px;
-      overflow-wrap: anywhere;
-    }
-
-    .photo-card input {
-      border: 0;
-      border-top: 1px solid var(--border);
-      border-radius: 0;
-      font-size: 12px;
-    }
-
-    .empty-state {
-      padding: 18px;
-      text-align: center;
-      color: var(--muted);
-      border: 1px dashed #C8D4DC;
-      border-radius: 9px;
-      font-size: 13px;
-    }
-
-    .report-paper {
-      background: white;
-      border: 1px solid #CFD8DE;
-      border-radius: 8px;
-      padding: 28px;
-      color: #17212A;
-    }
-
-    .draft-banner {
-      padding: 10px;
-      margin-bottom: 18px;
-      border: 1px solid #FDBA74;
-      background: #FFF7ED;
-      color: #9A3412;
-      text-align: center;
-      font-weight: 800;
-      font-size: 12px;
-    }
-
-    .report-header {
-      display: flex;
-      justify-content: space-between;
-      gap: 18px;
-      border-bottom: 2px solid var(--navy);
-      padding-bottom: 12px;
-      margin-bottom: 18px;
-    }
-
-    .report-header strong { color: var(--navy); }
-
-    .report-title {
-      text-align: center;
-      color: var(--navy);
-      background: #F1F5F9;
-      padding: 12px;
-      margin: 14px 0 18px;
-      font-size: 16px;
-    }
-
-    .report-section {
-      margin: 18px 0;
-      break-inside: avoid;
-    }
-
-    .report-section h3 {
-      color: var(--navy);
-      font-size: 13px;
-      text-transform: uppercase;
-      border-bottom: 1px solid #CAD5DD;
-      padding-bottom: 5px;
-      margin-bottom: 8px;
-    }
-
-    .report-section p {
-      margin: 5px 0;
-      font-size: 12px;
-      white-space: pre-wrap;
-      overflow-wrap: anywhere;
-    }
-
-    .report-table {
-      min-width: 0;
-      font-size: 12px;
-    }
-
-    .signature {
-      margin: 55px auto 10px;
-      text-align: center;
-      max-width: 350px;
-      break-inside: avoid;
-    }
-
-    .signature-line {
-      border-top: 1px solid #111;
-      margin-bottom: 8px;
-    }
-
-    #toast {
-      position: fixed;
-      z-index: 100;
-      bottom: 18px;
-      left: 50%;
-      transform: translateX(-50%);
-      max-width: calc(100vw - 30px);
-      padding: 12px 16px;
-      border-radius: 9px;
-      background: #1F2937;
-      color: white;
-      box-shadow: 0 5px 18px #0003;
-      font-size: 13px;
-    }
-
-    #toast.error { background: #8F1D18; }
-    #toast.success { background: #12633F; }
-
-    @media (max-width: 700px) {
-      .grid-2, .grid-3 { grid-template-columns: 1fr; }
-      .app-header { padding: 11px 4%; }
-      main { padding: 0 11px 45px; }
-      .card { padding: 16px; }
-      .header-right { width: 100%; justify-content: space-between; }
-      .report-paper { padding: 16px; }
-      .report-header { flex-direction: column; }
-    }
-
-    @media print {
-      @page { size: A4; margin: 14mm; }
-
-      body, html { background: white !important; }
-      body * { visibility: hidden !important; }
-
-      #app, #pane-report, #pane-report * {
-        visibility: visible !important;
-      }
-
-      #app {
-        display: block !important;
-        position: static !important;
-      }
-
-      .app-header, .tabs, .no-print, #toast {
-        display: none !important;
-      }
-
-      main {
-        display: block !important;
-        max-width: none !important;
-        margin: 0 !important;
-        padding: 0 !important;
-      }
-
-      .tab-pane { display: none !important; }
-
-      #pane-report {
-        display: block !important;
-        position: absolute !important;
-        left: 0 !important;
-        top: 0 !important;
-        width: 100% !important;
-      }
-
-      #report-paper {
-        display: block !important;
-        border: 0 !important;
-        border-radius: 0 !important;
-        box-shadow: none !important;
-        padding: 0 !important;
-      }
-
-      .photo-card img {
-        height: 150px !important;
-        object-fit: contain !important;
-      }
-    }
-  </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Painel de Laudos | Leandro AP Engenharia Elétrica AD</title>
+<style>
+  :root{--azul:#0B2545;--azul2:#13315C;--destaque:#1FA3A3;--cinza:#f2f4f7;--texto:#1d2939;--erro:#b42318;--ok:#067647;}
+  *{box-sizing:border-box}
+  body{margin:0;font-family:system-ui,-apple-system,"Segoe UI",Roboto,Arial,sans-serif;background:var(--cinza);color:var(--texto)}
+  header{background:var(--azul);color:#fff;padding:14px 18px;display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap}
+  header h1{font-size:1.05rem;margin:0}
+  main{max-width:960px;margin:0 auto;padding:16px}
+  .card{background:#fff;border-radius:12px;padding:18px;margin-bottom:16px;box-shadow:0 1px 3px rgba(0,0,0,.08)}
+  h2{margin:0 0 12px;font-size:1.15rem;color:var(--azul)}
+  h3{font-size:1rem;margin:14px 0 8px;color:var(--azul2)}
+  label{display:block;font-size:.85rem;font-weight:600;margin:10px 0 4px}
+  input,select,textarea{width:100%;padding:10px;border:1px solid #cfd4dc;border-radius:8px;font-size:1rem;background:#fff}
+  textarea{min-height:70px;resize:vertical}
+  .grid{display:grid;grid-template-columns:1fr;gap:4px 14px}
+  @media(min-width:700px){.grid{grid-template-columns:1fr 1fr}}
+  button{background:var(--destaque);color:#fff;border:0;border-radius:8px;padding:10px 14px;font-size:.95rem;font-weight:600;cursor:pointer;margin:6px 6px 0 0}
+  button.sec{background:var(--azul2)}
+  button.perigo{background:#b42318}
+  button.leve{background:#667085}
+  .tabs button{background:#e4e7ec;color:var(--azul)}
+  .tabs button.ativa{background:var(--azul);color:#fff}
+  .item{border:1px solid #e4e7ec;border-radius:10px;padding:12px;margin-top:10px}
+  .badge{display:inline-block;padding:3px 10px;border-radius:999px;font-size:.78rem;font-weight:700}
+  .rasc{background:#fef0c7;color:#93370d}
+  .final{background:#d1fadf;color:var(--ok)}
+  .msg{padding:10px;border-radius:8px;margin-top:10px;font-size:.92rem}
+  .msg.erro{background:#fee4e2;color:var(--erro)}
+  .msg.ok{background:#d1fadf;color:var(--ok)}
+  .aviso{font-size:.85rem;color:#667085;margin-top:6px}
+  .fotos{display:grid;grid-template-columns:repeat(auto-fill,minmax(140px,1fr));gap:10px;margin-top:10px}
+  .fotos img{width:100%;height:110px;object-fit:cover;border-radius:8px;border:1px solid #e4e7ec}
+  .fotos small{display:block;font-size:.8rem;color:#475467;margin-top:2px}
+  [hidden]{display:none!important}
+</style>
 </head>
-
 <body>
 
-  <!-- LOGIN -->
-  <section id="login-screen" class="login-screen">
-    <div class="login-card">
-      <div class="login-logo">⚡</div>
-      <h1>LEANDRO AP ENGENHARIA</h1>
-      <p class="subtitle">Painel técnico — acesso restrito</p>
+<header>
+  <h1>Leandro AP Engenharia Elétrica AD · Painel de Laudos</h1>
+  <button id="btn-sair" class="leve" hidden>Sair</button>
+</header>
 
-      <div id="setup-warning" class="setup-warning" hidden></div>
-
-      <form id="login-form">
-        <div class="field">
-          <label for="login-email">E-mail</label>
-          <input id="login-email" type="email" autocomplete="username"
-                 required placeholder="Seu e-mail do Supabase">
-        </div>
-
-        <div class="field">
-          <label for="login-password">Senha</label>
-          <input id="login-password" type="password"
-                 autocomplete="current-password" required placeholder="Sua senha">
-        </div>
-
-        <button id="login-button" class="btn btn-dark" type="submit"
-                style="width:100%">Entrar</button>
-      </form>
-
-      <p id="login-error" class="login-error" hidden></p>
-    </div>
+<main>
+  <section id="area-login" class="card">
+    <h2>Entrar</h2>
+    <form id="form-login">
+      <label for="email">E-mail</label>
+      <input id="email" type="email" required autocomplete="username">
+      <label for="senha">Senha</label>
+      <input id="senha" type="password" required autocomplete="current-password">
+      <button type="submit">Entrar</button>
+    </form>
+    <div id="login-msg"></div>
   </section>
 
-  <!-- APLICAÇÃO -->
-  <div id="app" hidden>
-    <header class="app-header">
-      <div class="brand">
-        <div class="brand-mark">LAP</div>
-        <div>
-          <h1>LEANDRO AP ENGENHARIA ELÉTRICA</h1>
-          <small>Painel de clientes, inspeções e relatórios</small>
-        </div>
-      </div>
+  <section id="painel" hidden>
+    <div class="tabs card">
+      <button id="tab-clientes" class="ativa">Clientes</button>
+      <button id="tab-inspecoes">Inspeções</button>
+    </div>
 
-      <div class="header-right">
-        <span id="user-email"></span>
-        <div class="button-row">
-          <a href="./index.html" class="btn btn-light btn-small">Ver site</a>
-          <button id="logout-button" class="btn btn-red btn-small" type="button">
-            Sair
-          </button>
-        </div>
-      </div>
-    </header>
-
-    <nav id="tabs" class="tabs" aria-label="Navegação do painel">
-      <button class="tab-btn active" type="button" data-target="pane-dashboard">📊 Painel</button>
-      <button class="tab-btn" type="button" data-target="pane-clients">👥 Clientes</button>
-      <button class="tab-btn" type="button" data-target="pane-inspections">⚡ Inspeções</button>
-      <button class="tab-btn" type="button" data-target="pane-report">📄 Relatório</button>
-    </nav>
-
-    <main>
-      <!-- DASHBOARD -->
-      <section id="pane-dashboard" class="tab-pane active">
-        <div class="kpis">
-          <div class="kpi">
-            <span>Clientes cadastrados</span>
-            <strong id="kpi-clients">0</strong>
+    <div id="aba-clientes">
+      <section class="card">
+        <h2>Novo cliente</h2>
+        <form id="form-cliente">
+          <div class="grid">
+            <div><label>Nome</label><input id="c-nome" required></div>
+            <div><label>Documento (CPF/CNPJ)</label><input id="c-documento"></div>
+            <div><label>Telefone</label><input id="c-telefone"></div>
+            <div><label>E-mail</label><input id="c-email" type="email"></div>
+            <div><label>Endereço</label><input id="c-endereco"></div>
+            <div><label>Tipo de imóvel</label><input id="c-tipo"></div>
           </div>
-          <div class="kpi">
-            <span>Inspeções registradas</span>
-            <strong id="kpi-inspections">0</strong>
-          </div>
-        </div>
+          <button type="submit">Salvar cliente</button>
+        </form>
+        <div id="cliente-msg"></div>
+      </section>
+      <section class="card">
+        <h2>Clientes cadastrados</h2>
+        <div id="lista-clientes"></div>
+      </section>
+    </div>
 
-        <div class="card">
-          <h2>Bem-vindo ao painel</h2>
-          <p class="muted">
-            Cadastre clientes, registre inspeções e prepare rascunhos de relatórios.
-            As informações são consultadas no Supabase com as políticas de acesso
-            vinculadas à sua conta.
-          </p>
-          <div class="button-row">
-            <button id="go-new-client" class="btn" type="button">＋ Cadastrar cliente</button>
-            <button id="go-new-inspection" class="btn btn-dark" type="button">＋ Nova inspeção</button>
+    <div id="aba-inspecoes" hidden>
+      <section class="card">
+        <h2 id="titulo-form-insp">Nova inspeção</h2>
+        <form id="form-inspecao">
+          <input type="hidden" id="i-id">
+          <div class="grid">
+            <div><label>Cliente</label><select id="i-cliente" required></select></div>
+            <div><label>Data da vistoria</label><input id="i-data" type="date"></div>
+            <div><label>Tipo de laudo</label>
+              <select id="i-tipo">
+                <option>Laudo elétrico</option>
+                <option>SPDA</option>
+                <option>Inspeção NR-10</option>
+                <option>Termografia</option>
+                <option>Medições elétricas</option>
+                <option>Consultoria técnica</option>
+                <option>Outro</option>
+              </select>
+            </div>
           </div>
-        </div>
 
-        <div class="notice">
-          Os relatórios gerados por esta versão são rascunhos. Revise os dados,
-          métodos, medições, instrumentos, referências normativas e conclusões
-          antes de qualquer emissão. O sistema não verifica automaticamente a
-          conformidade com normas técnicas.
-        </div>
+          <h3>Medições (preencha somente o que foi medido)</h3>
+          <div class="grid">
+            <div><label>Tensão</label><input id="i-m-tensao"></div>
+            <div><label>Corrente</label><input id="i-m-corrente"></div>
+            <div><label>Aterramento</label><input id="i-m-aterramento"></div>
+            <div><label>Isolamento</label><input id="i-m-isolamento"></div>
+            <div><label>Instrumento utilizado</label><input id="i-m-instrumento"></div>
+          </div>
+
+          <h3>Textos do laudo</h3>
+          <label>Objetivo</label><textarea id="i-t-objetivo"></textarea>
+          <label>Não conformidades / constatações</label><textarea id="i-t-naoconf"></textarea>
+          <label>Conclusão</label><textarea id="i-t-conclusao"></textarea>
+
+          <button type="submit">Salvar inspeção</button>
+          <button type="button" id="i-cancelar" class="leve">Limpar formulário</button>
+        </form>
+        <div id="inspecao-msg"></div>
       </section>
 
-      <!-- CLIENTES -->
-      <section id="pane-clients" class="tab-pane">
-        <div class="card">
-          <h2>Cadastrar cliente</h2>
-
-          <form id="client-form">
-            <div class="grid-2">
-              <div class="field">
-                <label for="cli-nome">Nome / razão social *</label>
-                <input id="cli-nome" required maxlength="200">
-              </div>
-
-              <div class="field">
-                <label for="cli-documento">CPF / CNPJ</label>
-                <input id="cli-documento" maxlength="40">
-              </div>
-
-              <div class="field">
-                <label for="cli-telefone">Telefone / WhatsApp *</label>
-                <input id="cli-telefone" type="tel" required maxlength="40">
-              </div>
-
-              <div class="field">
-                <label for="cli-email">E-mail</label>
-                <input id="cli-email" type="email" maxlength="200">
-              </div>
-
-              <div class="field">
-                <label for="cli-tipo">Tipo de imóvel</label>
-                <select id="cli-tipo">
-                  <option value="residencial">Residencial</option>
-                  <option value="comercial">Comercial</option>
-                  <option value="industrial">Industrial</option>
-                  <option value="condominio">Condomínio</option>
-                  <option value="outro">Outro</option>
-                </select>
-              </div>
-
-              <div class="field">
-                <label for="cli-endereco">Endereço completo *</label>
-                <input id="cli-endereco" required maxlength="300"
-                       placeholder="Rua, número, bairro, cidade - SP">
-              </div>
-            </div>
-
-            <button id="save-client-button" class="btn btn-green" type="submit">
-              Salvar cliente
-            </button>
-          </form>
-        </div>
-
-        <div class="card">
-          <h2>Clientes cadastrados</h2>
-          <div class="field">
-            <label for="client-search">Pesquisar</label>
-            <input id="client-search" type="search" placeholder="Nome, telefone ou endereço">
-          </div>
-
-          <div class="table-wrap">
-            <table>
-              <thead>
-                <tr>
-                  <th>Nome</th>
-                  <th>Telefone</th>
-                  <th>Endereço</th>
-                  <th>Tipo</th>
-                </tr>
-              </thead>
-              <tbody id="clients-table"></tbody>
-            </table>
-          </div>
-        </div>
+      <section class="card" id="area-fotos" hidden>
+        <h2>Fotografias da inspeção selecionada</h2>
+        <p class="aviso">Inspeção: <strong id="fotos-titulo"></strong></p>
+        <label>Legenda</label>
+        <input id="foto-legenda" placeholder="Ex.: Quadro de distribuição">
+        <label>Imagem</label>
+        <input id="foto-arquivo" type="file" accept="image/jpeg,image/png,image/webp,image/gif">
+        <button id="btn-enviar-foto">Enviar foto</button>
+        <div id="foto-msg"></div>
+        <div id="lista-fotos" class="fotos"></div>
       </section>
 
-      <!-- INSPEÇÕES -->
-      <section id="pane-inspections" class="tab-pane">
-        <div class="card">
-          <div class="button-row" style="justify-content:space-between">
-            <h2 id="inspection-form-title">Nova inspeção</h2>
-            <button id="new-inspection-button" class="btn btn-light btn-small"
-                    type="button">＋ Limpar / nova</button>
-          </div>
-
-          <form id="inspection-form">
-            <div class="grid-2">
-              <div class="field">
-                <label for="insp-cliente">Cliente *</label>
-                <select id="insp-cliente" required>
-                  <option value="">Selecione um cliente</option>
-                </select>
-              </div>
-
-              <div class="field">
-                <label for="insp-data">Data da vistoria *</label>
-                <input id="insp-data" type="date" required>
-              </div>
-
-              <div class="field">
-                <label for="insp-tipo">Tipo de relatório *</label>
-                <select id="insp-tipo" required>
-                  <option value="instalacoes_eletricas">Instalações elétricas</option>
-                  <option value="spda">SPDA</option>
-                  <option value="nr10">Relatório relacionado à NR-10</option>
-                  <option value="personalizado">Personalizado</option>
-                </select>
-              </div>
-
-              <div class="field">
-                <label for="insp-status">Status técnico *</label>
-                <select id="insp-status" required>
-                  <option value="">Selecione após a avaliação</option>
-                  <option value="CONFORME">Conforme — justificar no relatório</option>
-                  <option value="CONFORME COM RECOMENDAÇÕES">Conforme com recomendações</option>
-                  <option value="NÃO CONFORME">Não conforme — registrar evidências</option>
-                  <option value="PENDENTE DE AVALIAÇÃO">Pendente de avaliação</option>
-                </select>
-              </div>
-            </div>
-
-            <h3>Medições registradas</h3>
-            <p class="muted">Deixe em branco quando não houver medição. O sistema não preencherá valores presumidos.</p>
-
-            <div class="grid-3">
-              <div class="field">
-                <label for="med-tensao">Tensão (V)</label>
-                <input id="med-tensao" maxlength="100" placeholder="Valor medido">
-              </div>
-
-              <div class="field">
-                <label for="med-corrente">Corrente (A)</label>
-                <input id="med-corrente" maxlength="100" placeholder="Valor medido">
-              </div>
-
-              <div class="field">
-                <label for="med-aterramento">Aterramento (Ω)</label>
-                <input id="med-aterramento" maxlength="100" placeholder="Valor medido">
-              </div>
-
-              <div class="field">
-                <label for="med-isolamento">Isolamento (MΩ)</label>
-                <input id="med-isolamento" maxlength="100" placeholder="Valor medido">
-              </div>
-
-              <div class="field">
-                <label for="med-instrumento">Instrumento utilizado</label>
-                <input id="med-instrumento" maxlength="200"
-                       placeholder="Modelo, identificação e dados pertinentes">
-              </div>
-            </div>
-
-            <div class="field">
-              <label for="texto-objetivo">Objetivo, escopo e referências verificadas</label>
-              <textarea id="texto-objetivo" maxlength="10000"></textarea>
-            </div>
-
-            <div class="field">
-              <label for="texto-naoconf">Constatações / não conformidades observadas</label>
-              <textarea id="texto-naoconf" maxlength="10000"></textarea>
-            </div>
-
-            <div class="field">
-              <label for="texto-conclusao">Recomendações e conclusão técnica</label>
-              <textarea id="texto-conclusao" maxlength="10000"></textarea>
-            </div>
-
-            <div class="card" style="background:#F8FAFC">
-              <h3>Fotografias</h3>
-              <p class="muted">
-                O armazenamento de fotos requer a configuração do bucket privado
-                descrita abaixo. Limite por foto: 10 MB.
-              </p>
-
-              <div class="field">
-                <label for="photo-input">Selecionar imagens da câmera ou galeria</label>
-                <input id="photo-input" type="file" accept="image/jpeg,image/png,image/webp,image/gif" multiple>
-              </div>
-
-              <h3>Fotos selecionadas, ainda não enviadas</h3>
-              <div id="pending-photos" class="photo-grid"></div>
-
-              <h3 style="margin-top:18px">Fotos já salvas nesta inspeção</h3>
-              <div id="existing-photos" class="photo-grid"></div>
-            </div>
-
-            <div class="button-row">
-              <button id="save-inspection-button" class="btn btn-green" type="submit">
-                Salvar inspeção
-              </button>
-              <button id="preview-report-button" class="btn btn-dark" type="button">
-                Visualizar rascunho
-              </button>
-            </div>
-          </form>
-        </div>
-
-        <div class="card">
-          <h2>Inspeções registradas</h2>
-          <div class="field">
-            <label for="inspection-search">Pesquisar</label>
-            <input id="inspection-search" type="search" placeholder="Cliente, tipo ou status">
-          </div>
-
-          <div class="table-wrap">
-            <table>
-              <thead>
-                <tr>
-                  <th>Data</th>
-                  <th>Cliente</th>
-                  <th>Tipo</th>
-                  <th>Status</th>
-                  <th>Ação</th>
-                </tr>
-              </thead>
-              <tbody id="inspections-table"></tbody>
-            </table>
-          </div>
-        </div>
+      <section class="card">
+        <h2>Inspeções</h2>
+        <div id="lista-inspecoes"></div>
       </section>
+    </div>
+  </section>
+</main>
 
-      <!-- RELATÓRIO -->
-      <section id="pane-report" class="tab-pane">
-        <div class="card no-print">
-          <h2>Pré-visualização do relatório</h2>
-          <p class="muted">
-            Use “Visualizar rascunho” na inspeção para atualizar o documento.
-            Para criar um arquivo, escolha “Imprimir” e depois “Salvar como PDF”.
-          </p>
-          <div class="button-row">
-            <button id="print-button" class="btn btn-dark" type="button">
-              Imprimir / salvar como PDF
-            </button>
-            <button id="back-inspection-button" class="btn btn-light" type="button">
-              Voltar à inspeção
-            </button>
-          </div>
-        </div>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script>
+  const SUPABASE_URL = "COLE_A_PROJECT_URL_AQUI";
+  const SUPABASE_ANON_KEY = "COLE_A_CHAVE_PUBLICA_ANON_OU_PUBLISHABLE_AQUI";
+  const STORAGE_BUCKET = "laudos-fotos";
 
-        <div id="report-empty" class="empty-state">
-          Ainda não há relatório para visualizar. Preencha uma inspeção e toque em
-          “Visualizar rascunho”.
-        </div>
+  const sb = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
-        <article id="report-paper" class="report-paper" hidden>
-          <div class="draft-banner">
-            RASCUNHO — REVISAR E VALIDAR TECNICAMENTE ANTES DE QUALQUER EMISSÃO
-          </div>
+  const $ = id => document.getElementById(id);
+  const v = id => $(id).value.trim() || null;
 
-          <div class="report-header">
+  let clientes = [];
+  let inspecoes = [];
+  let inspecaoAtual = null;
+
+  function esc(x){
+    return String(x ?? "").replace(/[&<>"']/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+  }
+  function txt(x){ return x && String(x).trim() ? esc(x) : "Não informado"; }
+  function dataBR(d){
+    if (!d) return "Não informado";
+    const p = String(d).slice(0,10).split("-");
+    return p.length === 3 ? `${p[2]}/${p[1]}/${p[0]}` : esc(d);
+  }
+  function aviso(el, texto, tipo = "ok"){
+    el.innerHTML = `<div class="msg ${tipo}">${esc(texto)}</div>`;
+  }
+  function limpaAviso(el){ el.innerHTML = ""; }
+  async function usuarioAtual(){
+    const { data: { user } } = await sb.auth.getUser();
+    return user;
+  }
+
+  /* ---------- LOGIN ---------- */
+  async function mostrarPainel(){
+    $("area-login").hidden = true;
+    $("painel").hidden = false;
+    $("btn-sair").hidden = false;
+    await carregarClientes();
+    await carregarInspecoes();
+  }
+  function esconderPainel(){
+    $("area-login").hidden = false;
+    $("painel").hidden = true;
+    $("btn-sair").hidden = true;
+  }
+
+  $("form-login").addEventListener("submit", async e => {
+    e.preventDefault();
+    const { error } = await sb.auth.signInWithPassword({
+      email: $("email").value.trim(),
+      password: $("senha").value
+    });
+    if (error) return aviso($("login-msg"), "Não foi possível entrar: " + error.message, "erro");
+    $("senha").value = "";
+    limpaAviso($("login-msg"));
+    mostrarPainel();
+  });
+
+  $("btn-sair").addEventListener("click", async () => {
+    await sb.auth.signOut();
+    location.reload();
+  });
+
+  (async () => {
+    const { data: { session } } = await sb.auth.getSession();
+    if (session) mostrarPainel(); else esconderPainel();
+  })();
+
+  /* ---------- ABAS ---------- */
+  function abrirAba(qual){
+    const cli = qual === "clientes";
+    $("aba-clientes").hidden = !cli;
+    $("aba-inspecoes").hidden = cli;
+    $("tab-clientes").classList.toggle("ativa", cli);
+    $("tab-inspecoes").classList.toggle("ativa", !cli);
+  }
+  $("tab-clientes").onclick = () => abrirAba("clientes");
+  $("tab-inspecoes").onclick = () => abrirAba("inspecoes");
+
+  /* ---------- CLIENTES ---------- */
+  async function carregarClientes(){
+    const { data, error } = await sb.from("clientes").select("*").order("criado_em", { ascending: false });
+    if (error) return aviso($("cliente-msg"), "Erro ao carregar clientes: " + error.message, "erro");
+    clientes = data || [];
+    $("lista-clientes").innerHTML = clientes.length
+      ? clientes.map(c => `
+          <div class="item">
+            <strong>${esc(c.nome)}</strong><br>
+            Telefone: ${txt(c.telefone)} · E-mail: ${txt(c.email)}<br>
+            Endereço: ${txt(c.endereco)}
+          </div>`).join("")
+      : "<p class='aviso'>Nenhum cliente cadastrado.</p>";
+    $("i-cliente").innerHTML = clientes.map(c => `<option value="${c.id}">${esc(c.nome)}</option>`).join("");
+  }
+
+  $("form-cliente").addEventListener("submit", async e => {
+    e.preventDefault();
+    const formulario = e.target;
+    const user = await usuarioAtual();
+    const { error } = await sb.from("clientes").insert({
+      owner_id: user.id,
+      nome: v("c-nome"),
+      documento: v("c-documento"),
+      telefone: v("c-telefone"),
+      email: v("c-email"),
+      endereco: v("c-endereco"),
+      tipo_imovel: v("c-tipo")
+    });
+    if (error) return aviso($("cliente-msg"), "Erro ao salvar cliente: " + error.message, "erro");
+    formulario.reset();
+    await carregarClientes();
+    aviso($("cliente-msg"), "Cliente salvo.");
+  });
+
+  /* ---------- INSPEÇÕES ---------- */
+  async function carregarInspecoes(){
+    const { data, error } = await sb.from("inspecoes").select("*").order("criado_em", { ascending: false });
+    if (error) return aviso($("inspecao-msg"), "Erro ao carregar inspeções: " + error.message, "erro");
+    inspecoes = data || [];
+    renderInspecoes();
+  }
+
+  function nomeCliente(id){
+    const c = clientes.find(x => x.id === id);
+    return c ? c.nome : "Cliente não encontrado";
+  }
+  function badge(status){
+    return status === "Finalizado"
+      ? `<span class="badge final">FINALIZADO</span>`
+      : `<span class="badge rasc">RASCUNHO</span>`;
+  }
+
+  function renderInspecoes(){
+    $("lista-inspecoes").innerHTML = inspecoes.length
+      ? inspecoes.map(i => `
+          <div class="item">
+            <strong>${esc(nomeCliente(i.cliente_id))}</strong> ${badge(i.status)}<br>
+            ${esc(i.tipo_laudo || "Tipo não informado")} · ${dataBR(i.data_vistoria)}
             <div>
-              <strong>LEANDRO AP ENGENHARIA ELÉTRICA AD</strong><br>
-              <span>São Paulo — SP | WhatsApp: (11) 93044-1562</span><br>
-              <span>Responsável informado: Leandro Aparecido Pereira Paes</span>
+              <button class="sec" onclick="editarInspecao('${i.id}')">Editar</button>
+              <button class="sec" onclick="abrirFotos('${i.id}')">Fotos</button>
+              <button class="leve" onclick="gerarRelatorio('${i.id}')">Relatório / PDF</button>
+              ${i.status === "Finalizado"
+                ? `<button class="leve" onclick="alterarStatus('${i.id}','Rascunho')">Voltar a rascunho</button>`
+                : `<button onclick="alterarStatus('${i.id}','Finalizado')">Finalizar laudo</button>`}
             </div>
+          </div>`).join("")
+      : "<p class='aviso'>Nenhuma inspeção cadastrada.</p>";
+  }
 
-            <div style="text-align:right">
-              <strong>IDENTIFICAÇÃO:</strong>
-              <span id="doc-number">RASCUNHO</span><br>
-              <strong>GERADO EM:</strong>
-              <span id="doc-generated-date"></span>
-            </div>
-          </div>
+  function setVal(id, valor){ $(id).value = valor ?? ""; }
 
-          <div class="report-title">
-            <strong id="doc-title">RASCUNHO DE RELATÓRIO TÉCNICO</strong>
-          </div>
+  function editarInspecao(id){
+    const i = inspecoes.find(x => x.id === id);
+    if (!i) return;
+    $("i-id").value = i.id;
+    setVal("i-cliente", i.cliente_id);
+    setVal("i-data", (i.data_vistoria || "").slice(0,10));
+    setVal("i-tipo", i.tipo_laudo);
+    setVal("i-m-tensao", i.med_tensao);
+    setVal("i-m-corrente", i.med_corrente);
+    setVal("i-m-aterramento", i.med_aterramento);
+    setVal("i-m-isolamento", i.med_isolamento);
+    setVal("i-m-instrumento", i.med_instrumento);
+    setVal("i-t-objetivo", i.texto_objetivo);
+    setVal("i-t-naoconf", i.texto_naoconf);
+    setVal("i-t-conclusao", i.texto_conclusao);
+    $("titulo-form-insp").textContent = "Editar inspeção";
+    abrirAba("inspecoes");
+    abrirFotos(id);
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  }
 
-          <section class="report-section">
-            <h3>1. Cliente e local da inspeção</h3>
-            <p><strong>Cliente:</strong> <span id="doc-client-name">Não informado</span></p>
-            <p><strong>CPF/CNPJ:</strong> <span id="doc-client-document">Não informado</span></p>
-            <p><strong>Endereço:</strong> <span id="doc-client-address">Não informado</span></p>
-            <p><strong>Data da vistoria:</strong> <span id="doc-inspection-date">Não informada</span></p>
-          </section>
+  function limparFormInspecao(){
+    $("form-inspecao").reset();
+    $("i-id").value = "";
+    $("titulo-form-insp").textContent = "Nova inspeção";
+    limpaAviso($("inspecao-msg"));
+  }
+  $("i-cancelar").onclick = limparFormInspecao;
 
-          <section class="report-section">
-            <h3>2. Responsável técnico</h3>
-            <p>Leandro Aparecido Pereira Paes</p>
-            <p>CREA: preencher/confirmar antes da emissão.</p>
-            <p>ART: registrar o número correspondente quando aplicável.</p>
-          </section>
-
-          <section class="report-section">
-            <h3>3. Objetivo, escopo e referências</h3>
-            <p id="doc-objective">Não informado.</p>
-          </section>
-
-          <section class="report-section">
-            <h3>4. Medições registradas</h3>
-            <div class="table-wrap">
-              <table class="report-table">
-                <thead>
-                  <tr>
-                    <th>Grandeza</th>
-                    <th>Valor informado</th>
-                    <th>Instrumento</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  <tr>
-                    <td>Tensão</td>
-                    <td id="doc-voltage">Não informado</td>
-                    <td rowspan="4" id="doc-instrument">Não informado</td>
-                  </tr>
-                  <tr><td>Corrente</td><td id="doc-current">Não informado</td></tr>
-                  <tr><td>Aterramento</td><td id="doc-ground">Não informado</td></tr>
-                  <tr><td>Isolamento</td><td id="doc-insulation">Não informado</td></tr>
-                </tbody>
-              </table>
-            </div>
-          </section>
-
-          <section class="report-section">
-            <h3>5. Constatações e não conformidades</h3>
-            <p id="doc-findings">Não informado — preencher após a avaliação.</p>
-          </section>
-
-          <section class="report-section">
-            <h3>6. Registro fotográfico</h3>
-            <div id="report-photos" class="photo-grid"></div>
-          </section>
-
-          <section class="report-section">
-            <h3>7. Status, recomendações e conclusão</h3>
-            <p><strong>Status informado:</strong> <span id="doc-status">Não informado</span></p>
-            <p id="doc-conclusion">Não informado — requer revisão técnica.</p>
-          </section>
-
-          <div class="signature">
-            <div class="signature-line"></div>
-            <strong>Leandro Aparecido Pereira Paes</strong><br>
-            Assinatura do responsável técnico
-          </div>
-        </article>
-      </section>
-    </main>
-  </div>
-
-  <div id="toast" hidden></div>
-
-  <script>
-    /*
-      CONFIGURAÇÃO:
-      Use a Project URL e a chave pública publishable/anon do Supabase.
-      NUNCA use service_role, sb_secret ou senha do banco neste arquivo.
-    */
-    const SUPABASE_URL = "https://xphlabwpflvlctvyglfv.supabase.co";
-    const SUPABASE_ANON_KEY = "sb_publishable_8xhkHzV4iOjyntIkJCszVg_bUCHEaeE";
-    const STORAGE_BUCKET = "laudos-fotos";
-
-    let supabaseClient = null;
-    let currentUser = null;
-    let clients = [];
-    let inspections = [];
-    let currentInspectionId = null;
-    let pendingPhotos = [];
-    let existingPhotos = [];
-    let toastTimer = null;
-
-    const $ = (id) => document.getElementById(id);
-
-    const REPORT_TITLES = {
-      instalacoes_eletricas: "RASCUNHO — Relatório de inspeção de instalações elétricas",
-      spda: "RASCUNHO — Relatório de inspeção de SPDA",
-      nr10: "RASCUNHO — Relatório relacionado à NR-10",
-      personalizado: "RASCUNHO — Relatório técnico personalizado"
+  $("form-inspecao").addEventListener("submit", async e => {
+    e.preventDefault();
+    const id = $("i-id").value;
+    const dados = {
+      cliente_id: $("i-cliente").value,
+      data_vistoria: v("i-data"),
+      tipo_laudo: $("i-tipo").value,
+      med_tensao: v("i-m-tensao"),
+      med_corrente: v("i-m-corrente"),
+      med_aterramento: v("i-m-aterramento"),
+      med_isolamento: v("i-m-isolamento"),
+      med_instrumento: v("i-m-instrumento"),
+      texto_objetivo: v("i-t-objetivo"),
+      texto_naoconf: v("i-t-naoconf"),
+      texto_conclusao: v("i-t-conclusao")
     };
 
-    function toast(message, kind) {
-      const box = $("toast");
-      box.textContent = message;
-      box.className = kind || "";
-      box.hidden = false;
-
-      clearTimeout(toastTimer);
-      toastTimer = setTimeout(() => {
-        box.hidden = true;
-      }, 4500);
+    let res;
+    if (id) {
+      // Ao editar, o status não é alterado aqui: ele muda só pelo botão Finalizar.
+      res = await sb.from("inspecoes").update(dados).eq("id", id).select();
+    } else {
+      const user = await usuarioAtual();
+      res = await sb.from("inspecoes").insert({ ...dados, status: "Rascunho", owner_id: user.id }).select();
     }
 
-    function setLoginError(message) {
-      const box = $("login-error");
-      box.textContent = message;
-      box.hidden = !message;
+    if (res.error) return aviso($("inspecao-msg"), "Erro ao salvar inspeção: " + res.error.message, "erro");
+    if (!res.data || !res.data.length) {
+      return aviso($("inspecao-msg"), "Nada foi salvo. Verifique se a inspeção pertence a esta conta.", "erro");
     }
 
-    function localDateValue() {
-      const now = new Date();
-      const offset = now.getTimezoneOffset() * 60000;
-      return new Date(now.getTime() - offset).toISOString().slice(0, 10);
+    await carregarInspecoes();
+    if (!id) {
+      limparFormInspecao();
+      abrirFotos(res.data[0].id);
     }
+    aviso($("inspecao-msg"), "Inspeção salva.");
+  });
 
-    function formatDate(value) {
-      if (!value) return "Não informada";
-      const date = new Date(value + "T00:00:00");
-      return Number.isNaN(date.getTime())
-        ? value
-        : date.toLocaleDateString("pt-BR");
+  /* ---------- FINALIZAR / VOLTAR A RASCUNHO ---------- */
+  async function alterarStatus(id, novo){
+    const pergunta = novo === "Finalizado"
+      ? "Confirma que este laudo foi revisado pelo responsável técnico? O PDF deixará de exibir RASCUNHO."
+      : "Voltar este laudo para RASCUNHO?";
+    if (!confirm(pergunta)) return;
+
+    const { data, error } = await sb.from("inspecoes").update({ status: novo }).eq("id", id).select();
+    if (error || !data || !data.length) {
+      return alert("Não foi possível alterar o status. " + (error ? error.message : "Verifique as permissões."));
     }
+    await carregarInspecoes();
+    alert("Status alterado para " + novo + ".");
+  }
 
-    function showApp() {
-      $("login-screen").hidden = true;
-      $("app").hidden = false;
-      $("user-email").textContent = currentUser?.email || "";
-      return loadAllData();
+  /* ---------- FOTOS ---------- */
+  async function abrirFotos(id){
+    inspecaoAtual = id;
+    const i = inspecoes.find(x => x.id === id);
+    $("fotos-titulo").textContent = i ? `${nomeCliente(i.cliente_id)} · ${dataBR(i.data_vistoria)}` : id;
+    $("area-fotos").hidden = false;
+    limpaAviso($("foto-msg"));
+    await listarFotos();
+  }
+
+  async function urlFoto(caminho){
+    if (!caminho) return "";
+    if (/^https?:\/\//.test(caminho)) return caminho;
+    const { data, error } = await sb.storage.from(STORAGE_BUCKET).createSignedUrl(caminho, 3600);
+    return error ? "" : data.signedUrl;
+  }
+
+  async function listarFotos(){
+    const { data, error } = await sb.from("fotos").select("*").eq("inspecao_id", inspecaoAtual).order("criado_em");
+    if (error) return aviso($("foto-msg"), "Erro ao carregar fotos: " + error.message, "erro");
+    const lista = data || [];
+    if (!lista.length) {
+      $("lista-fotos").innerHTML = "<p class='aviso'>Nenhuma foto nesta inspeção.</p>";
+      return;
     }
+    const urls = await Promise.all(lista.map(f => urlFoto(f.url)));
+    $("lista-fotos").innerHTML = lista.map((f, n) => `
+      <div>
+        ${urls[n] ? `<img src="${urls[n]}" alt="${esc(f.legenda || "Foto")}">` : "<p class='aviso'>Imagem indisponível</p>"}
+        <small>${txt(f.legenda)}</small>
+        <button class="perigo" onclick="excluirFoto('${f.id}','${esc(f.url)}')">Excluir</button>
+      </div>`).join("");
+  }
 
-    function showLogin() {
-      currentUser = null;
-      $("app").hidden = true;
-      $("login-screen").hidden = false;
+  async function excluirFoto(id, caminho){
+    if (!confirm("Excluir esta foto do laudo?")) return;
+    if (caminho && !/^https?:\/\//.test(caminho)) {
+      await sb.storage.from(STORAGE_BUCKET).remove([caminho]);
     }
-
-    function openPane(paneId) {
-      document.querySelectorAll(".tab-pane").forEach((pane) => {
-        pane.classList.toggle("active", pane.id === paneId);
-      });
-
-      document.querySelectorAll(".tab-btn").forEach((button) => {
-        button.classList.toggle("active", button.dataset.target === paneId);
-      });
-
-      window.scrollTo({ top: 0, behavior: "smooth" });
-    }
-
-    function bindInterface() {
-      $("login-form").addEventListener("submit", login);
-      $("logout-button").addEventListener("click", logout);
-      $("client-form").addEventListener("submit", saveClient);
-      $("inspection-form").addEventListener("submit", saveInspection);
-
-      $("tabs").addEventListener("click", (event) => {
-        const button = event.target.closest(".tab-btn");
-        if (button) openPane(button.dataset.target);
-      });
-
-      $("go-new-client").addEventListener("click", () => {
-        openPane("pane-clients");
-        $("cli-nome").focus();
-      });
-
-      $("go-new-inspection").addEventListener("click", () => {
-        newInspection();
-        openPane("pane-inspections");
-      });
-
-      $("new-inspection-button").addEventListener("click", newInspection);
-
-      $("client-search").addEventListener("input", renderClients);
-      $("inspection-search").addEventListener("input", renderInspections);
-
-      $("inspections-table").addEventListener("click", (event) => {
-        const button = event.target.closest("[data-edit-inspection]");
-        if (button) loadInspection(button.dataset.editInspection);
-      });
-
-      $("photo-input").addEventListener("change", addSelectedPhotos);
-
-      $("pending-photos").addEventListener("click", (event) => {
-        const button = event.target.closest("[data-remove-photo]");
-        if (button) removePendingPhoto(button.dataset.removePhoto);
-      });
-
-      $("preview-report-button").addEventListener("click", previewReport);
-
-      $("print-button").addEventListener("click", () => {
-        if ($("report-paper").hidden) {
-          toast("Gere a pré-visualização antes de imprimir.", "error");
-          return;
-        }
-        window.print();
-      });
-
-      $("back-inspection-button").addEventListener("click", () => {
-        openPane("pane-inspections");
-      });
-    }
-
-    async function initialize() {
-      bindInterface();
-
-      const urlMissing =
-        !SUPABASE_URL.startsWith("https://") ||
-        SUPABASE_URL.includes("COLE_");
-
-      const keyMissing =
-        !SUPABASE_ANON_KEY ||
-        SUPABASE_ANON_KEY.includes("COLE_");
-
-      if (urlMissing || keyMissing) {
-        $("setup-warning").textContent =
-          "Configure SUPABASE_URL e SUPABASE_ANON_KEY no código, usando a Project URL e a chave pública do Supabase.";
-        $("setup-warning").hidden = false;
-        $("login-button").disabled = true;
-        return;
-      }
-
-      if (!window.supabase || typeof window.supabase.createClient !== "function") {
-        $("setup-warning").textContent =
-          "O SDK do Supabase não carregou. Verifique a conexão com a internet e tente novamente.";
-        $("setup-warning").hidden = false;
-        $("login-button").disabled = true;
-        return;
-      }
-
-      try {
-        supabaseClient = window.supabase.createClient(
-          SUPABASE_URL,
-          SUPABASE_ANON_KEY
-        );
-
-        supabaseClient.auth.onAuthStateChange((event) => {
-          if (event === "SIGNED_OUT") showLogin();
-        });
-
-        const { data, error } = await supabaseClient.auth.getSession();
-
-        if (error) throw error;
-
-        if (data.session) {
-          currentUser = data.session.user;
-          await showApp();
-        }
-      } catch (error) {
-        console.error(error);
-        $("setup-warning").textContent =
-          "Não foi possível iniciar a conexão com o Supabase. Confira a URL, a chave pública e a conexão.";
-        $("setup-warning").hidden = false;
-      }
-    }
-
-    async function login(event) {
-      event.preventDefault();
-      setLoginError("");
-
-      const button = $("login-button");
-      button.disabled = true;
-      button.textContent = "Entrando…";
-
-      try {
-        const { data, error } = await supabaseClient.auth.signInWithPassword({
-          email: $("login-email").value.trim(),
-          password: $("login-password").value
-        });
-
-        if (error) throw error;
-
-        currentUser = data.user;
-        await showApp();
-      } catch (error) {
-        if (error) {
-        console.error("Erro no login do Supabase:", error);
-        alert("Detalhe do erro: " + (error.message || String(error)));
-        return;
-        }
-        setLoginError("Não foi possível entrar. Confira o e-mail e a senha e tente novamente.");
-      } finally {
-        button.disabled = false;
-        button.textContent = "Entrar";
-      }
-    }
-
-    async function logout() {
-      if (!supabaseClient) return;
-
-      const { error } = await supabaseClient.auth.signOut();
-
-      if (error) {
-        toast("Não foi possível encerrar a sessão: " + error.message, "error");
-        return;
-      }
-
-      showLogin();
-    }
-
-    async function loadAllData() {
-      if (!supabaseClient || !currentUser) return;
-
-      try {
-        const [clientsResult, inspectionsResult] = await Promise.all([
-          supabaseClient
-            .from("clientes")
-            .select("id,nome,documento,telefone,email,endereco,tipo_imovel,criado_em,owner_id")
-            .order("criado_em", { ascending: false }),
-
-          supabaseClient
-            .from("inspecoes")
-            .select("id,cliente_id,data_vistoria,tipo_laudo,status,med_tensao,med_corrente,med_aterramento,med_isolamento,med_instrumento,texto_objetivo,texto_naoconf,texto_conclusao,criado_em,owner_id")
-            .order("criado_em", { ascending: false })
-        ]);
-
-        if (clientsResult.error) throw clientsResult.error;
-        if (inspectionsResult.error) throw inspectionsResult.error;
-
-        clients = clientsResult.data || [];
-        inspections = inspectionsResult.data || [];
-
-        renderClients();
-        populateClientSelect();
-        renderInspections();
-        updateKpis();
-      } catch (error) {
-        console.error(error);
-        toast("Erro ao carregar dados: " + error.message, "error");
-      }
-    }
-
-    function updateKpis() {
-      $("kpi-clients").textContent = clients.length;
-      $("kpi-inspections").textContent = inspections.length;
-    }
-
-    function addCell(row, value) {
-      const cell = document.createElement("td");
-      cell.textContent = value || "";
-      row.appendChild(cell);
-      return cell;
-    }
-
-    function renderClients() {
-      const body = $("clients-table");
-      const search = $("client-search").value.trim().toLocaleLowerCase("pt-BR");
-      body.replaceChildren();
-
-      const filtered = clients.filter((client) => {
-        const text = [
-          client.nome, client.telefone, client.endereco,
-          client.documento, client.email, client.tipo_imovel
-        ].join(" ").toLocaleLowerCase("pt-BR");
-
-        return text.includes(search);
-      });
-
-      if (!filtered.length) {
-        const row = document.createElement("tr");
-        const cell = document.createElement("td");
-        cell.colSpan = 4;
-        cell.textContent = clients.length
-          ? "Nenhum cliente corresponde à pesquisa."
-          : "Ainda não há clientes cadastrados.";
-        row.appendChild(cell);
-        body.appendChild(row);
-        return;
-      }
-
-      filtered.forEach((client) => {
-        const row = document.createElement("tr");
-        addCell(row, client.nome);
-        addCell(row, client.telefone);
-        addCell(row, client.endereco);
-        addCell(row, client.tipo_imovel);
-        body.appendChild(row);
-      });
-    }
-
-    function populateClientSelect() {
-      const select = $("insp-cliente");
-      const previous = select.value;
-
-      select.replaceChildren();
-
-      const first = document.createElement("option");
-      first.value = "";
-      first.textContent = clients.length
-        ? "Selecione um cliente"
-        : "Cadastre um cliente primeiro";
-      select.appendChild(first);
-
-      clients.forEach((client) => {
-        const option = document.createElement("option");
-        option.value = client.id;
-        option.textContent = client.nome;
-        select.appendChild(option);
-      });
-
-      if (clients.some((client) => String(client.id) === String(previous))) {
-        select.value = previous;
-      }
-    }
-
-    async function saveClient(event) {
-      event.preventDefault();
-
-      if (!currentUser) {
-        toast("Entre novamente no sistema.", "error");
-        return;
-      }
-
-      const payload = {
-        owner_id: currentUser.id,
-        nome: $("cli-nome").value.trim(),
-        documento: $("cli-documento").value.trim() || null,
-        telefone: $("cli-telefone").value.trim(),
-        email: $("cli-email").value.trim() || null,
-        endereco: $("cli-endereco").value.trim(),
-        tipo_imovel: $("cli-tipo").value
-      };
-
-      const button = $("save-client-button");
-      button.disabled = true;
-
-      try {
-        const { error } = await supabaseClient
-          .from("clientes")
-          .insert(payload);
-
-        if (error) throw error;
-
-        $("client-form").reset();
-        await loadAllData();
-        toast("Cliente cadastrado.", "success");
-      } catch (error) {
-        console.error(error);
-        toast("Erro ao salvar cliente: " + error.message, "error");
-      } finally {
-        button.disabled = false;
-      }
-    }
-
-    function renderInspections() {
-      const body = $("inspections-table");
-      const search = $("inspection-search").value.trim().toLocaleLowerCase("pt-BR");
-      body.replaceChildren();
-
-      const clientMap = new Map(clients.map((client) => [String(client.id), client]));
-
-      const filtered = inspections.filter((inspection) => {
-        const client = clientMap.get(String(inspection.cliente_id));
-        const text = [
-          client?.nome,
-          inspection.tipo_laudo,
-          inspection.status,
-          inspection.data_vistoria
-        ].join(" ").toLocaleLowerCase("pt-BR");
-
-        return text.includes(search);
-      });
-
-      if (!filtered.length) {
-        const row = document.createElement("tr");
-        const cell = document.createElement("td");
-        cell.colSpan = 5;
-        cell.textContent = inspections.length
-          ? "Nenhuma inspeção corresponde à pesquisa."
-          : "Ainda não há inspeções cadastradas.";
-        row.appendChild(cell);
-        body.appendChild(row);
-        return;
-      }
-
-      filtered.forEach((inspection) => {
-        const row = document.createElement("tr");
-        const client = clientMap.get(String(inspection.cliente_id));
-
-        addCell(row, formatDate(inspection.data_vistoria));
-        addCell(row, client?.nome || "Cliente não encontrado");
-        addCell(row, REPORT_TITLES[inspection.tipo_laudo] || inspection.tipo_laudo);
-        addCell(row, inspection.status);
-
-        const actionCell = document.createElement("td");
-        const button = document.createElement("button");
-        button.type = "button";
-        button.className = "btn btn-small";
-        button.textContent = "Abrir / editar";
-        button.dataset.editInspection = inspection.id;
-        actionCell.appendChild(button);
-        row.appendChild(actionCell);
-
-        body.appendChild(row);
-      });
-    }
-
-    function newInspection() {
-      $("inspection-form").reset();
-      currentInspectionId = null;
-      $("inspection-form-title").textContent = "Nova inspeção";
-      $("insp-data").value = localDateValue();
-
-      clearPendingPhotos();
-      existingPhotos = [];
-      renderExistingPhotos();
-      populateClientSelect();
-
-      openPane("pane-inspections");
-    }
-
-    async function loadInspection(id) {
-      const inspection = inspections.find((item) => String(item.id) === String(id));
-
-      if (!inspection) {
-        toast("Inspeção não encontrada.", "error");
-        return;
-      }
-
-      currentInspectionId = inspection.id;
-      $("inspection-form-title").textContent = "Editar inspeção";
-      $("insp-cliente").value = inspection.cliente_id || "";
-      $("insp-data").value = inspection.data_vistoria || "";
-      $("insp-tipo").value = inspection.tipo_laudo || "personalizado";
-      $("insp-status").value = inspection.status || "";
-      $("med-tensao").value = inspection.med_tensao || "";
-      $("med-corrente").value = inspection.med_corrente || "";
-      $("med-aterramento").value = inspection.med_aterramento || "";
-      $("med-isolamento").value = inspection.med_isolamento || "";
-      $("med-instrumento").value = inspection.med_instrumento || "";
-      $("texto-objetivo").value = inspection.texto_objetivo || "";
-      $("texto-naoconf").value = inspection.texto_naoconf || "";
-      $("texto-conclusao").value = inspection.texto_conclusao || "";
-
-      clearPendingPhotos();
-      await loadExistingPhotos(inspection.id);
-      openPane("pane-inspections");
-    }
-
-    async function saveInspection(event) {
-      event.preventDefault();
-
-      if (!currentUser) {
-        toast("Entre novamente no sistema.", "error");
-        return;
-      }
-
-      const payload = {
-        owner_id: currentUser.id,
-        cliente_id: $("insp-cliente").value,
-        data_vistoria: $("insp-data").value,
-        tipo_laudo: $("insp-tipo").value,
-        status: $("insp-status").value,
-        med_tensao: $("med-tensao").value.trim() || null,
-        med_corrente: $("med-corrente").value.trim() || null,
-        med_aterramento: $("med-aterramento").value.trim() || null,
-        med_isolamento: $("med-isolamento").value.trim() || null,
-        med_instrumento: $("med-instrumento").value.trim() || null,
-        texto_objetivo: $("texto-objetivo").value.trim() || null,
-        texto_naoconf: $("texto-naoconf").value.trim() || null,
-        texto_conclusao: $("texto-conclusao").value.trim() || null
-      };
-
-      if (!payload.cliente_id) {
-        toast("Selecione um cliente.", "error");
-        return;
-      }
-
-      const button = $("save-inspection-button");
-      button.disabled = true;
-
-      try {
-        let result;
-
-        if (currentInspectionId) {
-          result = await supabaseClient
-            .from("inspecoes")
-            .update(payload)
-            .eq("id", currentInspectionId)
-            .eq("owner_id", currentUser.id)
-            .select("id")
-            .single();
-        } else {
-          result = await supabaseClient
-            .from("inspecoes")
-            .insert(payload)
-            .select("id")
-            .single();
-        }
-
-        if (result.error) throw result.error;
-
-        currentInspectionId = result.data.id;
-        $("inspection-form-title").textContent = "Editar inspeção";
-
-        const photoResult = await uploadPendingPhotos(currentInspectionId);
-
-        await loadAllData();
-        await loadExistingPhotos(currentInspectionId);
-
-        if (photoResult.errors.length) {
-          toast(
-            "Inspeção salva; algumas fotos não foram enviadas. Configure o bucket e tente novamente.",
-            "error"
-          );
-        } else {
-          toast("Inspeção salva.", "success");
-        }
-      } catch (error) {
-        console.error(error);
-        toast("Erro ao salvar inspeção: " + error.message, "error");
-      } finally {
-        button.disabled = false;
-      }
-    }
-
-    function clearPendingPhotos() {
-      pendingPhotos.forEach((photo) => {
-        if (photo.previewUrl) URL.revokeObjectURL(photo.previewUrl);
-      });
-
-      pendingPhotos = [];
-      $("photo-input").value = "";
-      renderPendingPhotos();
-    }
-
-    function addSelectedPhotos(event) {
-      const files = Array.from(event.target.files || []);
-      const allowedTypes = [
-        "image/jpeg", "image/png", "image/webp", "image/gif"
-      ];
-
-      files.forEach((file) => {
-        if (!allowedTypes.includes(file.type)) {
-          toast("Formato não aceito. Use JPG, PNG, WebP ou GIF.", "error");
-          return;
-        }
-
-        if (file.size > 10 * 1024 * 1024) {
-          toast("Cada foto deve ter no máximo 10 MB.", "error");
-          return;
-        }
-
-        const key = window.crypto?.randomUUID
-          ? window.crypto.randomUUID()
-          : String(Date.now()) + Math.random().toString(36).slice(2);
-
-        pendingPhotos.push({
-          key,
-          file,
-          legenda: "",
-          previewUrl: URL.createObjectURL(file)
-        });
-      });
-
-      event.target.value = "";
-      renderPendingPhotos();
-    }
-
-    function renderPendingPhotos() {
-      const container = $("pending-photos");
-      container.replaceChildren();
-
-      if (!pendingPhotos.length) {
-        const empty = document.createElement("div");
-        empty.className = "empty-state";
-        empty.textContent = "Nenhuma foto selecionada.";
-        container.appendChild(empty);
-        return;
-      }
-
-      pendingPhotos.forEach((photo) => {
-        const card = document.createElement("div");
-        card.className = "photo-card";
-
-        const image = document.createElement("img");
-        image.src = photo.previewUrl;
-        image.alt = "Pré-visualização da foto";
-
-        const caption = document.createElement("input");
-        caption.type = "text";
-        caption.maxLength = 300;
-        caption.placeholder = "Legenda da fotografia";
-        caption.value = photo.legenda;
-        caption.addEventListener("input", () => {
-          photo.legenda = caption.value;
-        });
-
-        const remove = document.createElement("button");
-        remove.type = "button";
-        remove.className = "btn btn-red btn-small";
-        remove.textContent = "Remover";
-        remove.dataset.removePhoto = photo.key;
-        remove.style.margin = "7px";
-
-        card.append(image, caption, remove);
-        container.appendChild(card);
-      });
-    }
-
-    function removePendingPhoto(key) {
-      const photo = pendingPhotos.find((item) => item.key === key);
-      if (photo?.previewUrl) URL.revokeObjectURL(photo.previewUrl);
-
-      pendingPhotos = pendingPhotos.filter((item) => item.key !== key);
-      renderPendingPhotos();
-    }
-
-    function safeFileName(name) {
-      return name
-        .normalize("NFD")
-        .replace(/[\u0300-\u036f]/g, "")
-        .replace(/[^a-zA-Z0-9._-]/g, "_")
-        .slice(-100) || "foto.jpg";
-    }
-
-    async function uploadPendingPhotos(inspectionId) {
-      const errors = [];
-      const remaining = [];
-      const uploaded = [];
-
-      for (const photo of pendingPhotos) {
-        const fileId = window.crypto?.randomUUID
-          ? window.crypto.randomUUID()
-          : String(Date.now()) + Math.random().toString(36).slice(2);
-
-        const path =
-          currentUser.id + "/" +
-          inspectionId + "/" +
-          fileId + "_" + safeFileName(photo.file.name);
-
-        try {
-          const { error: uploadError } = await supabaseClient
-            .storage
-            .from(STORAGE_BUCKET)
-            .upload(path, photo.file, {
-              upsert: false,
-              contentType: photo.file.type,
-              cacheControl: "3600"
-            });
-
-          if (uploadError) throw uploadError;
-
-          const { error: rowError } = await supabaseClient
-            .from("fotos")
-            .insert({
-              owner_id: currentUser.id,
-              inspecao_id: inspectionId,
-              url: path,
-              legenda: photo.legenda.trim() || null
-            });
-
-          if (rowError) {
-            await supabaseClient.storage.from(STORAGE_BUCKET).remove([path]);
-            throw rowError;
-          }
-
-          uploaded.push(photo);
-        } catch (error) {
-          console.error(error);
-          errors.push(error.message || "Erro ao enviar foto.");
-          remaining.push(photo);
-        }
-      }
-
-      uploaded.forEach((photo) => {
-        if (photo.previewUrl) URL.revokeObjectURL(photo.previewUrl);
-      });
-
-      pendingPhotos = remaining;
-      renderPendingPhotos();
-
-      return { errors };
-    }
-
-    async function loadExistingPhotos(inspectionId) {
-      existingPhotos = [];
-
-      const { data, error } = await supabaseClient
-        .from("fotos")
-        .select("id,inspecao_id,url,legenda,criado_em,owner_id")
-        .eq("inspecao_id", inspectionId)
-        .order("criado_em", { ascending: true });
-
-      if (error) {
-        console.error(error);
-        toast("Não foi possível carregar as fotos: " + error.message, "error");
-        renderExistingPhotos();
-        return;
-      }
-
-      existingPhotos = await Promise.all((data || []).map(async (photo) => {
-        if (/^https?:\/\//i.test(photo.url || "")) {
-          return { ...photo, displayUrl: photo.url };
-        }
-
-        const { data: signedData, error: signedError } = await supabaseClient
-          .storage
-          .from(STORAGE_BUCKET)
-          .createSignedUrl(photo.url, 3600);
-
-        return {
-          ...photo,
-          displayUrl: signedError ? "" : signedData.signedUrl
-        };
-      }));
-
-      renderExistingPhotos();
-    }
-
-    function renderExistingPhotos() {
-      const container = $("existing-photos");
-      container.replaceChildren();
-
-      if (!existingPhotos.length) {
-        const empty = document.createElement("div");
-        empty.className = "empty-state";
-        empty.textContent = "Nenhuma foto salva nesta inspeção.";
-        container.appendChild(empty);
-        return;
-      }
-
-      existingPhotos.forEach((photo) => {
-        const card = document.createElement("div");
-        card.className = "photo-card";
-
-        if (photo.displayUrl) {
-          const image = document.createElement("img");
-          image.src = photo.displayUrl;
-          image.alt = photo.legenda || "Foto da inspeção";
-          card.appendChild(image);
-        } else {
-          const message = document.createElement("p");
-          message.textContent = "Foto cadastrada, mas não foi possível gerar o link de visualização. Verifique o bucket privado.";
-          card.appendChild(message);
-        }
-
-        const caption = document.createElement("p");
-        caption.textContent = photo.legenda || "Sem legenda";
-        card.appendChild(caption);
-        container.appendChild(card);
-      });
-    }
-
-    function previewReport() {
-      const clientId = $("insp-cliente").value;
-      const client = clients.find((item) => String(item.id) === String(clientId));
-
-      if (!client) {
-        toast("Selecione um cliente antes de gerar o rascunho.", "error");
-        return;
-      }
-
-      if (!$("insp-status").value) {
-        toast("Selecione o status após sua avaliação técnica.", "error");
-        return;
-      }
-
-      $("doc-title").textContent =
-        REPORT_TITLES[$("insp-tipo").value] || "RASCUNHO — Relatório técnico";
-
-      $("doc-number").textContent = currentInspectionId
-        ? String(currentInspectionId).slice(0, 8).toUpperCase()
-        : "NÃO SALVO";
-
-      $("doc-generated-date").textContent =
-        new Date().toLocaleDateString("pt-BR");
-
-      $("doc-client-name").textContent = client.nome || "Não informado";
-      $("doc-client-document").textContent = client.documento || "Não informado";
-      $("doc-client-address").textContent = client.endereco || "Não informado";
-      $("doc-inspection-date").textContent = formatDate($("insp-data").value);
-
-      $("doc-objective").textContent =
-        $("texto-objetivo").value.trim() || "Não informado — preencher antes da emissão.";
-
-      $("doc-voltage").textContent =
-        $("med-tensao").value.trim() || "Não informado";
-
-      $("doc-current").textContent =
-        $("med-corrente").value.trim() || "Não informado";
-
-      $("doc-ground").textContent =
-        $("med-aterramento").value.trim() || "Não informado";
-
-      $("doc-insulation").textContent =
-        $("med-isolamento").value.trim() || "Não informado";
-
-      $("doc-instrument").textContent =
-        $("med-instrumento").value.trim() || "Não informado";
-
-      $("doc-findings").textContent =
-        $("texto-naoconf").value.trim() ||
-        "Não informado — preencher após a avaliação. Não interpretar como ausência de não conformidades.";
-
-      $("doc-status").textContent = $("insp-status").value;
-
-      $("doc-conclusion").textContent =
-        $("texto-conclusao").value.trim() ||
-        "Não informado — requer avaliação e validação do responsável técnico.";
-
-      renderReportPhotos();
-
-      $("report-empty").hidden = true;
-      $("report-paper").hidden = false;
-      openPane("pane-report");
-    }
-
-    function renderReportPhotos() {
-      const container = $("report-photos");
-      container.replaceChildren();
-
-      const photos = [
-        ...existingPhotos
-          .filter((photo) => photo.displayUrl)
-          .map((photo) => ({
-            url: photo.displayUrl,
-            caption: photo.legenda || "Sem legenda"
-          })),
-        ...pendingPhotos.map((photo) => ({
-          url: photo.previewUrl,
-          caption: photo.legenda || "Sem legenda"
-        }))
-      ];
-
-      if (!photos.length) {
-        const empty = document.createElement("p");
-        empty.textContent = "Nenhuma fotografia anexada.";
-        container.appendChild(empty);
-        return;
-      }
-
-      photos.forEach((photo) => {
-        const card = document.createElement("div");
-        card.className = "photo-card";
-
-        const image = document.createElement("img");
-        image.src = photo.url;
-        image.alt = photo.caption;
-
-        const caption = document.createElement("p");
-        caption.textContent = photo.caption;
-
-        card.append(image, caption);
-        container.appendChild(card);
-      });
-    }
-
-    document.addEventListener("DOMContentLoaded", initialize);
-  </script>
+    const { error } = await sb.from("fotos").delete().eq("id", id);
+    if (error) return aviso($("foto-msg"), "Erro ao excluir foto: " + error.message, "erro");
+    listarFotos();
+  }
+
+  $("btn-enviar-foto").onclick = async () => {
+    if (!inspecaoAtual) return aviso($("foto-msg"), "Selecione uma inspeção primeiro.", "erro");
+    const arquivo = $("foto-arquivo").files[0];
+    if (!arquivo) return aviso($("foto-msg"), "Escolha uma imagem.", "erro");
+    if (arquivo.size > 10 * 1024 * 1024) return aviso($("foto-msg"), "A imagem passa de 10 MB.", "erro");
+
+    aviso($("foto-msg"), "Enviando...");
+    const user = await usuarioAtual();
+    const ext = (arquivo.name.split(".").pop() || "jpg").toLowerCase().replace(/[^a-z0-9]/g, "") || "jpg";
+    const caminho = `${user.id}/${inspecaoAtual}/${Date.now()}.${ext}`;
+
+    const up = await sb.storage.from(STORAGE_BUCKET).upload(caminho, arquivo, {
+      contentType: arquivo.type,
+      upsert: false
+    });
+    if (up.error) return aviso($("foto-msg"), "Erro ao enviar a imagem: " + up.error.message, "erro");
+
+    const { error } = await sb.from("fotos").insert({
+      inspecao_id: inspecaoAtual,
+      url: caminho,
+      legenda: v("foto-legenda"),
+      owner_id: user.id
+    });
+    if (error) return aviso($("foto-msg"), "Erro ao registrar a foto: " + error.message, "erro");
+
+    $("foto-arquivo").value = "";
+    $("foto-legenda").value = "";
+    await listarFotos();
+    aviso($("foto-msg"), "Foto enviada.");
+  };
+
+  /* ---------- RELATÓRIO ---------- */
+  async function gerarRelatorio(id){
+    const { data: i, error } = await sb.from("inspecoes").select("*").eq("id", id).single();
+    if (error) return alert("Erro ao buscar a inspeção: " + error.message);
+
+    const cliente = clientes.find(c => c.id === i.cliente_id) || {};
+    const { data: fotos } = await sb.from("fotos").select("*").eq("inspecao_id", id).order("criado_em");
+    const lista = fotos || [];
+    const urls = await Promise.all(lista.map(f => urlFoto(f.url)));
+    const rascunho = i.status !== "Finalizado";
+
+    const identificacao = [
+      ["Cliente", cliente.nome],
+      ["Documento", cliente.documento],
+      ["Endereço", cliente.endereco],
+      ["Tipo de imóvel", cliente.tipo_imovel],
+      ["Tipo de laudo", i.tipo_laudo],
+      ["Data da vistoria", dataBR(i.data_vistoria)]
+    ];
+    const medicoes = [
+      ["Tensão", i.med_tensao],
+      ["Corrente", i.med_corrente],
+      ["Aterramento", i.med_aterramento],
+      ["Isolamento", i.med_isolamento],
+      ["Instrumento", i.med_instrumento]
+    ];
+
+    const html = `<!DOCTYPE html>
+<html lang="pt-BR"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Relatório - ${esc(cliente.nome || "")}</title>
+<style>
+  body{font-family:Arial,sans-serif;color:#1d2939;max-width:820px;margin:0 auto;padding:20px;font-size:14px}
+  header{border-bottom:3px solid #0B2545;padding-bottom:10px;margin-bottom:14px}
+  h1{font-size:18px;color:#0B2545;margin:0}
+  h2{font-size:15px;color:#0B2545;border-bottom:1px solid #d0d5dd;padding-bottom:4px;margin-top:20px}
+  table{width:100%;border-collapse:collapse}
+  td{border:1px solid #d0d5dd;padding:6px;vertical-align:top}
+  td.r{width:32%;background:#f2f4f7;font-weight:bold}
+  .status{font-weight:bold;padding:8px 10px;margin:10px 0;text-align:center;border:2px solid}
+  .rasc{color:#93370d;border-color:#93370d;background:#fef0c7}
+  .final{color:#067647;border-color:#067647;background:#d1fadf}
+  .fotos{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+  .fotos img{width:100%;border:1px solid #d0d5dd}
+  .fotos p{margin:2px 0 10px;font-size:12px}
+  .texto{white-space:pre-wrap}
+  .assinatura{margin-top:60px;text-align:center}
+  .assinatura div{border-top:1px solid #000;width:320px;margin:0 auto;padding-top:4px}
+  .botao{background:#0B2545;color:#fff;border:0;padding:10px 16px;border-radius:6px;cursor:pointer;margin-bottom:14px}
+  @media print{.botao{display:none}}
+</style></head>
+<body>
+  <button class="botao" onclick="window.print()">Imprimir / Salvar PDF</button>
+  <header>
+    <h1>Leandro AP Engenharia Elétrica AD</h1>
+    <div>Responsável técnico: Leandro Aparecido Pereira Paes</div>
+    <div>Atendimento na região de São Paulo</div>
+  </header>
+  <div class="status ${rascunho ? "rasc" : "final"}">
+    ${rascunho ? "RASCUNHO — REVISAR E VALIDAR TECNICAMENTE ANTES DE QUALQUER EMISSÃO" : "FINALIZADO PELO RESPONSÁVEL TÉCNICO"}
+  </div>
+
+  <h2>Identificação</h2>
+  <table>${identificacao.map(([a,b]) => `<tr><td class="r">${a}</td><td>${a === "Data da vistoria" ? b : txt(b)}</td></tr>`).join("")}</table>
+
+  <h2>Medições</h2>
+  <table>${medicoes.map(([a,b]) => `<tr><td class="r">${a}</td><td>${txt(b)}</td></tr>`).join("")}</table>
+
+  <h2>Objetivo</h2>
+  <div class="texto">${txt(i.texto_objetivo)}</div>
+
+  <h2>Constatações / não conformidades</h2>
+  <div class="texto">${txt(i.texto_naoconf)}</div>
+
+  <h2>Conclusão</h2>
+  <div class="texto">${txt(i.texto_conclusao)}</div>
+
+  <h2>Fotografias</h2>
+  <div class="fotos">
+    ${lista.length
+      ? lista.map((f, n) => urls[n] ? `<div><img src="${urls[n]}"><p>${txt(f.legenda)}</p></div>` : "").join("")
+      : "<p>Nenhuma fotografia.</p>"}
+  </div>
+
+  <div class="assinatura"><div>Assinatura do responsável técnico</div></div>
+</body></html>`;
+
+    const w = window.open("", "_blank");
+    if (!w) return alert("O navegador bloqueou a janela. Permita pop-ups e tente novamente.");
+    w.document.open();
+    w.document.write(html);
+    w.document.close();
+  }
+</script>
 </body>
 </html>
