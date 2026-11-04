@@ -6,439 +6,866 @@
 <title>Painel de Laudos | Leandro AP Engenharia Elétrica AD</title>
 <link rel="icon" href="icone.svg" type="image/svg+xml">
 <style>
-:root{--azul:#0B2545;--azul2:#13315C;--destaque:#1FA3A3;--cinza:#f2f4f7;--texto:#1d2939;--erro:#b42318;--ok:#067647}
-*{box-sizing:border-box}
-body{margin:0;font-family:system-ui,-apple-system,"Segoe UI",Roboto,Arial,sans-serif;background:var(--cinza);color:var(--texto)}
-header{background:#fff;color:var(--azul);padding:12px 18px;display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap;border-bottom:3px solid var(--destaque)}
-header h1{font-size:1rem;margin:0;color:var(--azul)}
-.logo{height:46px;width:auto;display:block}
-main{max-width:960px;margin:0 auto;padding:16px}
-.card{background:#fff;border-radius:12px;padding:18px;margin-bottom:16px;box-shadow:0 1px 3px rgba(0,0,0,.08)}
-h2{margin:0 0 12px;font-size:1.15rem;color:var(--azul)}
-h3{font-size:1rem;margin:14px 0 8px;color:var(--azul2)}
-label{display:block;font-size:.85rem;font-weight:600;margin:10px 0 4px}
-input,select,textarea{width:100%;padding:10px;border:1px solid #cfd4dc;border-radius:8px;font-size:1rem;background:#fff}
-textarea{min-height:70px;resize:vertical}
-.grid{display:grid;grid-template-columns:1fr;gap:4px 14px}
-@media(min-width:700px){.grid{grid-template-columns:1fr 1fr}}
-button{background:var(--destaque);color:#fff;border:0;border-radius:8px;padding:10px 14px;font-size:.95rem;font-weight:600;cursor:pointer;margin:6px 6px 0 0}
-button.sec{background:var(--azul2)}
-button.perigo{background:#b42318}
-button.leve{background:#667085}
-.tabs button{background:#e4e7ec;color:var(--azul)}
-.tabs button.ativa{background:var(--azul);color:#fff}
-.item{border:1px solid #e4e7ec;border-radius:10px;padding:12px;margin-top:10px}
-.badge{display:inline-block;padding:3px 10px;border-radius:999px;font-size:.78rem;font-weight:700}
-.rasc{background:#fef0c7;color:#93370d}
-.final{background:#d1fadf;color:var(--ok)}
-.msg{padding:10px;border-radius:8px;margin-top:10px;font-size:.92rem}
-.msg.erro{background:#fee4e2;color:var(--erro)}
-.msg.ok{background:#d1fadf;color:var(--ok)}
-.aviso{font-size:.85rem;color:#667085;margin-top:8px}
-.fotos{display:grid;grid-template-columns:repeat(auto-fill,minmax(140px,1fr));gap:10px;margin-top:10px}
-.fotos img{width:100%;height:110px;object-fit:cover;border-radius:8px;border:1px solid #e4e7ec}
-.fotos small{display:block;font-size:.8rem;color:#475467;margin-top:2px}
-[hidden]{display:none!important}
+  :root{--azul:#0B2545;--azul2:#13315C;--destaque:#1FA3A3;--cinza:#f2f4f7;--texto:#1d2939;--erro:#b42318;--ok:#067647;}
+  *{box-sizing:border-box}
+  body{margin:0;font-family:system-ui,-apple-system,"Segoe UI",Roboto,Arial,sans-serif;background:var(--cinza);color:var(--texto)}
+  header{background:#fff;color:var(--azul);padding:12px 18px;display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap;border-bottom:3px solid var(--destaque)}
+  header h1{font-size:1rem;margin:0;color:var(--azul)}
+  .logo{height:46px;width:auto;display:block}
+  main{max-width:960px;margin:0 auto;padding:16px}
+  .card{background:#fff;border-radius:12px;padding:18px;margin-bottom:16px;box-shadow:0 1px 3px rgba(0,0,0,.08)}
+  h2{margin:0 0 12px;font-size:1.15rem;color:var(--azul)}
+  h3{font-size:1rem;margin:16px 0 8px;color:var(--azul2);border-left:4px solid var(--destaque);padding-left:8px}
+  label{display:block;font-size:.85rem;font-weight:600;margin:10px 0 4px}
+  input,select,textarea{width:100%;padding:10px;border:1px solid #cfd4dc;border-radius:8px;font-size:1rem;background:#fff}
+  textarea{min-height:70px;resize:vertical}
+  small.dica{display:block;color:#667085;font-weight:400;margin-top:2px;font-size:.78rem}
+  .grid{display:grid;grid-template-columns:1fr;gap:4px 14px}
+  @media(min-width:700px){.grid{grid-template-columns:1fr 1fr}}
+  button{background:var(--destaque);color:#fff;border:0;border-radius:8px;padding:10px 14px;font-size:.95rem;font-weight:600;cursor:pointer;margin:6px 6px 0 0}
+  button.sec{background:var(--azul2)}
+  button.perigo{background:#b42318}
+  button.leve{background:#667085}
+  .tabs button{background:#e4e7ec;color:var(--azul)}
+  .tabs button.ativa{background:var(--azul);color:#fff}
+  .item{border:1px solid #e4e7ec;border-radius:10px;padding:12px;margin-top:10px}
+  .badge{display:inline-block;padding:3px 10px;border-radius:999px;font-size:.78rem;font-weight:700}
+  .rasc{background:#fef0c7;color:#93370d}
+  .final{background:#d1fadf;color:var(--ok)}
+  .msg{padding:10px;border-radius:8px;margin-top:10px;font-size:.92rem}
+  .msg.erro{background:#fee4e2;color:var(--erro)}
+  .msg.ok{background:#d1fadf;color:var(--ok)}
+  .aviso{font-size:.85rem;color:#667085;margin-top:6px}
+  .norma{background:#e8f6f6;border:1px solid #1FA3A3;color:#0B2545;border-radius:8px;padding:8px 10px;font-size:.85rem;margin-top:8px}
+  .fotos{display:grid;grid-template-columns:repeat(auto-fill,minmax(140px,1fr));gap:10px;margin-top:10px}
+  .fotos img{width:100%;height:110px;object-fit:cover;border-radius:8px;border:1px solid #e4e7ec}
+  .fotos small{display:block;font-size:.8rem;color:#475467;margin-top:2px}
+  [hidden]{display:none!important}
 </style>
 </head>
 <body>
+
 <header>
-<img class="logo" src="logo.svg" alt="Leandro AP Engenharia Elétrica AD" onerror="this.style.display='none'">
-<h1>Painel de Laudos</h1>
-<button id="btn-sair" class="leve" hidden>Sair</button>
+  <img class="logo" src="logo.svg" alt="Leandro AP Engenharia Elétrica AD">
+  <h1>Painel de Laudos</h1>
+  <button id="btn-sair" class="leve" hidden>Sair</button>
 </header>
+
 <main>
-<section id="area-login" class="card">
-<h2>Entrar</h2>
-<form id="form-login">
-<label for="email">E-mail</label>
-<input id="email" type="email" required autocomplete="username">
-<label for="senha">Senha</label>
-<input id="senha" type="password" required autocomplete="current-password">
-<button type="submit">Entrar</button>
-</form>
-<div id="login-msg"></div>
-</section>
-<section id="painel" hidden>
-<div class="tabs card">
-<button id="tab-clientes" class="ativa">Clientes</button>
-<button id="tab-inspecoes">Inspeções</button>
-</div>
-<div id="aba-clientes">
-<section class="card">
-<h2>Novo cliente</h2>
-<form id="form-cliente">
-<div class="grid">
-<div><label>Nome</label><input id="c-nome" required></div>
-<div><label>Documento (CPF/CNPJ)</label><input id="c-documento"></div>
-<div><label>Telefone</label><input id="c-telefone"></div>
-<div><label>E-mail</label><input id="c-email" type="email"></div>
-<div><label>Endereço</label><input id="c-endereco"></div>
-<div><label>Tipo de imóvel</label><input id="c-tipo"></div>
-</div>
-<button type="submit">Salvar cliente</button>
-</form>
-<div id="cliente-msg"></div>
-</section>
-<section class="card">
-<h2>Clientes cadastrados</h2>
-<div id="lista-clientes"></div>
-</section>
-</div>
-<div id="aba-inspecoes" hidden>
-<section class="card">
-<h2 id="titulo-form-insp">Nova inspeção</h2>
-<form id="form-inspecao">
-<input type="hidden" id="i-id">
-<div class="grid">
-<div><label>Cliente</label><select id="i-cliente" required></select></div>
-<div><label>Data da vistoria</label><input id="i-data" type="date"></div>
-<div><label>Tipo de laudo</label>
-<select id="i-tipo">
-<option>Laudo elétrico</option>
-<option>SPDA</option>
-<option>Inspeção NR-10</option>
-<option>Termografia</option>
-<option>Medições elétricas</option>
-<option>Consultoria técnica</option>
-<option>Outro</option>
-</select>
-</div>
-</div>
-<div id="info-modelo" class="aviso"></div>
-<div id="campos-dinamicos"></div>
-<h3>Medições gerais (preencha somente o que foi medido)</h3>
-<div class="grid">
-<div><label>Tensão</label><input id="i-m-tensao"></div>
-<div><label>Corrente</label><input id="i-m-corrente"></div>
-<div><label>Aterramento</label><input id="i-m-aterramento"></div>
-<div><label>Isolamento</label><input id="i-m-isolamento"></div>
-<div><label>Instrumento utilizado</label><input id="i-m-instrumento"></div>
-</div>
-<h3>Textos do laudo</h3>
-<label>Objetivo</label><textarea id="i-t-objetivo"></textarea>
-<label>Não conformidades / constatações</label><textarea id="i-t-naoconf"></textarea>
-<label>Conclusão</label><textarea id="i-t-conclusao"></textarea>
-<button type="submit">Salvar inspeção</button>
-<button type="button" id="i-cancelar" class="leve">Limpar formulário</button>
-</form>
-<div id="inspecao-msg"></div>
-</section>
-<section class="card" id="area-fotos" hidden>
-<h2>Fotografias da inspeção selecionada</h2>
-<p class="aviso">Inspeção: <strong id="fotos-titulo"></strong></p>
-<label>Legenda</label>
-<input id="foto-legenda" placeholder="Ex.: Quadro de distribuição">
-<label>Imagem</label>
-<input id="foto-arquivo" type="file" accept="image/jpeg,image/png,image/webp,image/gif">
-<button id="btn-enviar-foto">Enviar foto</button>
-<div id="foto-msg"></div>
-<div id="lista-fotos" class="fotos"></div>
-</section>
-<section class="card">
-<h2>Inspeções</h2>
-<div id="lista-inspecoes"></div>
-</section>
-</div>
-</section>
+  <section id="area-login" class="card">
+    <h2>Entrar</h2>
+    <form id="form-login">
+      <label for="email">E-mail</label>
+      <input id="email" type="email" required autocomplete="username">
+      <label for="senha">Senha</label>
+      <input id="senha" type="password" required autocomplete="current-password">
+      <button type="submit">Entrar</button>
+    </form>
+    <div id="login-msg"></div>
+  </section>
+
+  <section id="painel" hidden>
+    <div class="tabs card">
+      <button id="tab-clientes" class="ativa">Clientes</button>
+      <button id="tab-inspecoes">Inspeções</button>
+    </div>
+
+    <div id="aba-clientes">
+      <section class="card">
+        <h2>Novo cliente</h2>
+        <form id="form-cliente">
+          <div class="grid">
+            <div><label>Nome</label><input id="c-nome" required></div>
+            <div><label>Documento (CPF/CNPJ)</label><input id="c-documento"></div>
+            <div><label>Telefone</label><input id="c-telefone"></div>
+            <div><label>E-mail</label><input id="c-email" type="email"></div>
+            <div><label>Endereço</label><input id="c-endereco"></div>
+            <div><label>Tipo de imóvel</label><input id="c-tipo"></div>
+          </div>
+          <button type="submit">Salvar cliente</button>
+        </form>
+        <div id="cliente-msg"></div>
+      </section>
+      <section class="card">
+        <h2>Clientes cadastrados</h2>
+        <div id="lista-clientes"></div>
+      </section>
+    </div>
+
+    <div id="aba-inspecoes" hidden>
+      <section class="card">
+        <h2 id="titulo-form-insp">Nova inspeção</h2>
+        <form id="form-inspecao">
+          <input type="hidden" id="i-id">
+          <div class="grid">
+            <div><label>Cliente</label><select id="i-cliente" required></select></div>
+            <div><label>Data da vistoria</label><input id="i-data" type="date"></div>
+            <div><label>Tipo de laudo</label>
+              <select id="i-tipo">
+                <option>Laudo elétrico</option>
+                <option>SPDA</option>
+                <option>Inspeção NR-10</option>
+                <option>Termografia</option>
+                <option>Medições elétricas</option>
+                <option>Projeto elétrico</option>
+                <option>Consultoria técnica</option>
+                <option>Outro</option>
+              </select>
+            </div>
+          </div>
+
+          <div id="norma-ref" class="norma" hidden></div>
+          <div id="campos-dinamicos"></div>
+
+          <h3>Medições gerais (opcional)</h3>
+          <div class="grid">
+            <div><label>Tensão</label><input id="i-m-tensao"></div>
+            <div><label>Corrente</label><input id="i-m-corrente"></div>
+            <div><label>Aterramento</label><input id="i-m-aterramento"></div>
+            <div><label>Isolamento</label><input id="i-m-isolamento"></div>
+            <div><label>Instrumento utilizado</label><input id="i-m-instrumento"></div>
+          </div>
+
+          <h3>Textos do laudo</h3>
+          <label>Objetivo</label><textarea id="i-t-objetivo"></textarea>
+          <label>Não conformidades / constatações</label><textarea id="i-t-naoconf"></textarea>
+          <label>Conclusão</label><textarea id="i-t-conclusao"></textarea>
+
+          <button type="submit">Salvar inspeção</button>
+          <button type="button" id="i-cancelar" class="leve">Limpar formulário</button>
+        </form>
+        <div id="inspecao-msg"></div>
+      </section>
+
+      <section class="card" id="area-fotos" hidden>
+        <h2>Fotografias da inspeção selecionada</h2>
+        <p class="aviso">Inspeção: <strong id="fotos-titulo"></strong></p>
+        <label>Legenda</label>
+        <input id="foto-legenda" placeholder="Ex.: Quadro de distribuição">
+        <label>Imagem</label>
+        <input id="foto-arquivo" type="file" accept="image/jpeg,image/png,image/webp,image/gif">
+        <button id="btn-enviar-foto">Enviar foto</button>
+        <div id="foto-msg"></div>
+        <div id="lista-fotos" class="fotos"></div>
+      </section>
+
+      <section class="card">
+        <h2>Inspeções</h2>
+        <div id="lista-inspecoes"></div>
+      </section>
+    </div>
+  </section>
 </main>
+
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script>
-const SUPABASE_URL = "https://xphlabwpflvlctvyglfv.supabase.co";
-const SUPABASE_ANON_KEY = "sb_publishable_8xhkHzV4iOjyntIkJCszVg_bUCHEaeE";
-const STORAGE_BUCKET = "laudos-fotos";
-const sb = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
-const $ = id => document.getElementById(id);
-const v = id => $(id).value.trim() || null;
-let clientes = [];
-let inspecoes = [];
-let inspecaoAtual = null;
-function esc(x){return String(x ?? "").replace(/[&<>"']/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));}
-function txt(x){ return x && String(x).trim() ? esc(x) : "Não informado"; }
-function dataBR(d){ if(!d) return "Não informado"; const p=String(d).slice(0,10).split("-"); return p.length===3 ? `${p[2]}/${p[1]}/${p[0]}` : esc(d); }
-function aviso(el,texto,tipo="ok"){ el.innerHTML=`<div class="msg ${tipo}">${esc(texto)}</div>`; }
-function limpaAviso(el){ el.innerHTML=""; }
-async function usuarioAtual(){ const {data:{user}} = await sb.auth.getUser(); return user; }
+  const SUPABASE_URL = "https://xphlabwpflvlctvyglfv.supabase.co";
+  const SUPABASE_ANON_KEY = "sb_publishable_8xhkHzV4iOjyntIkJCszVg_bUCHEaeE";
+  const STORAGE_BUCKET = "laudos-fotos";
 
-const MODELOS_LAUDO = {
-"Laudo elétrico":{
-descricao:"Modelo auxiliar Laudo Elétrico. Base geral NBR 5410 para BT. Se for MT, verifique NBR 14039. Confira a edição vigente.",
-objetivo_padrao:"Verificar as condições gerais das instalações elétricas, incluindo quadros, circuitos, proteções, aterramento e pontos de utilização, registrando constatações e recomendações.",
-extras:[
-{id:"tensao_nominal",rotulo:"Tensão nominal",tipo:"select",opcoes:["Não informado","127/220 V","220/380 V","380/660 V","Outro"]},
-{id:"esquema_aterramento",rotulo:"Esquema de aterramento",tipo:"select",opcoes:["Não informado","TN-S","TN-C","TN-C-S","TT","IT"]},
-{id:"protecao_geral",rotulo:"Proteção geral",tipo:"text",placeholder:"Ex.: Disjuntor tripolar 63 A"},
-{id:"dr",rotulo:"DR",tipo:"select",opcoes:["Não informado","Presente","Ausente","Parcial"]},
-{id:"dps",rotulo:"DPS",tipo:"select",opcoes:["Não informado","Presente","Ausente","Parcial"]},
-{id:"estado_quadros",rotulo:"Estado dos quadros",tipo:"select",opcoes:["Não informado","Bom","Regular","Ruim"]},
-{id:"condutores",rotulo:"Condutores / circuitos",tipo:"text",placeholder:"Ex.: Seções e estado aparente"},
-{id:"obs_eletrica",rotulo:"Observações da instalação",tipo:"textarea",placeholder:"Detalhes relevantes observados"}
-]},
-"SPDA":{
-descricao:"Modelo auxiliar SPDA. Base geral NBR 5419. Verifique classe, método e periodicidade na edição vigente.",
-objetivo_padrao:"Inspecionar o SPDA, incluindo captação, descidas, aterramento, equalização e proteção contra surtos, registrando estado, medições e não conformidades.",
-extras:[
-{id:"classe_spda",rotulo:"Classe do SPDA",tipo:"select",opcoes:["Não informado","I","II","III","IV"]},
-{id:"metodo",rotulo:"Método de proteção",tipo:"select",opcoes:["Não informado","Franklin","Faraday","Eletrogeométrico","Misto"]},
-{id:"captacao",rotulo:"Captação - estado",tipo:"select",opcoes:["Não informado","Bom","Regular","Ruim"]},
-{id:"descidas",rotulo:"Descidas",tipo:"text",placeholder:"Ex.: 4 descidas, fixação ok"},
-{id:"resistencia_spda",rotulo:"Resistência de aterramento",tipo:"text",placeholder:"Ex.: 8,2 ohms"},
-{id:"continuidade",rotulo:"Continuidade elétrica",tipo:"select",opcoes:["Não informado","Conforme","Não conforme","Não testado"]},
-{id:"dps_spda",rotulo:"DPS / MPS",tipo:"select",opcoes:["Não informado","Tipo I","Tipo II","Tipo I+II","Ausente"]},
-{id:"ultima_insp",rotulo:"Última inspeção",tipo:"text",placeholder:"Ex.: 01/2025"}
-]},
-"Inspeção NR-10":{
-descricao:"Modelo auxiliar NR-10. Verifique prontuário, medidas de controle, EPI, EPC e capacitação na norma vigente.",
-objetivo_padrao:"Verificar itens de segurança em instalações e serviços com eletricidade sob a ótica da NR-10, incluindo medidas de controle, sinalização, bloqueios e documentação.",
-extras:[
-{id:"prontuario",rotulo:"Prontuário",tipo:"select",opcoes:["Não informado","Existe","Não existe","Parcial","Não se aplica"]},
-{id:"epi_epc",rotulo:"EPI / EPC",tipo:"select",opcoes:["Não informado","Conforme","Não conforme","Parcial"]},
-{id:"sinalizacao",rotulo:"Sinalização",tipo:"select",opcoes:["Não informado","Conforme","Não conforme","Parcial"]},
-{id:"bloqueio",rotulo:"Bloqueio / etiquetagem",tipo:"select",opcoes:["Não informado","Existe","Não existe","Parcial"]},
-{id:"diagramas",rotulo:"Diagramas atualizados",tipo:"select",opcoes:["Não informado","Sim","Não","Não verificado"]},
-{id:"capacitacao",rotulo:"Capacitação NR-10",tipo:"select",opcoes:["Não informado","Em dia","Vencida","Não apresentada"]},
-{id:"risco_arco",rotulo:"Risco de arco / observações",tipo:"textarea",placeholder:"Registre pontos críticos observados"}
-]},
-"Termografia":{
-descricao:"Modelo auxiliar Termografia. Registre instrumento, emissividade, carga e condições no momento.",
-objetivo_padrao:"Realizar inspeção termográfica em quadros e conexões para identificar aquecimentos anormais indicativos de mau contato, sobrecarga ou desequilíbrio.",
-extras:[
-{id:"camera",rotulo:"Câmera / instrumento",tipo:"text",placeholder:"Ex.: Modelo da câmera"},
-{id:"emissividade",rotulo:"Emissividade",tipo:"text",placeholder:"Ex.: 0,95"},
-{id:"temp_amb",rotulo:"Temperatura ambiente",tipo:"text",placeholder:"Ex.: 28 C"},
-{id:"carga",rotulo:"Carga no momento",tipo:"select",opcoes:["Não informado","Com carga típica","Carga parcial","Sem carga"]},
-{id:"ponto_quente",rotulo:"Ponto mais quente",tipo:"text",placeholder:"Ex.: Fase B - 78 C"},
-{id:"delta_t",rotulo:"Delta T",tipo:"text",placeholder:"Ex.: 35 K acima do ambiente"},
-{id:"classificacao",rotulo:"Classificação",tipo:"select",opcoes:["Não informado","Normal","Atenção","Crítico"]}
-]},
-"Medições elétricas":{
-descricao:"Modelo auxiliar Medições. Registre somente valores efetivamente medidos, com unidade e instrumento.",
-objetivo_padrao:"Realizar medições elétricas pontuais para caracterização da instalação no momento da vistoria.",
-extras:[
-{id:"tensao_fn",rotulo:"Tensão fase-neutro",tipo:"text",placeholder:"Ex.: 127 / 128 / 126 V"},
-{id:"tensao_ff",rotulo:"Tensão fase-fase",tipo:"text",placeholder:"Ex.: 220 / 221 / 219 V"},
-{id:"corrente_fases",rotulo:"Corrente por fase",tipo:"text",placeholder:"Ex.: 12 / 15 / 11 A"},
-{id:"res_ater",rotulo:"Resistência de aterramento",tipo:"text",placeholder:"Ex.: 9,5 ohms"},
-{id:"res_iso",rotulo:"Resistência de isolamento",tipo:"text",placeholder:"Ex.: 50 Mohm"},
-{id:"frequencia",rotulo:"Frequência",tipo:"text",placeholder:"Ex.: 60 Hz"},
-{id:"cond_med",rotulo:"Condições da medição",tipo:"textarea",placeholder:"Carga, horário, pontos medidos"}
-]},
-"Consultoria técnica":{
-descricao:"Modelo auxiliar livre para consultoria e parecer técnico.",
-objetivo_padrao:"Prestar consultoria técnica sobre a instalação elétrica, analisando documentos e vistoria local, com recomendações.",
-extras:[
-{id:"escopo",rotulo:"Escopo",tipo:"textarea",placeholder:"O que foi solicitado e avaliado"},
-{id:"documentos",rotulo:"Documentos analisados",tipo:"textarea",placeholder:"Projetos, contas, fotos, normas consultadas"},
-{id:"recomendacoes",rotulo:"Recomendações iniciais",tipo:"textarea",placeholder:"Próximos passos sugeridos"}
-]},
-"Outro":{
-descricao:"Modelo genérico. Descreva o serviço executado.",
-objetivo_padrao:"Registrar vistoria técnica e constatações do serviço executado.",
-extras:[
-{id:"descricao_servico",rotulo:"Descrição do serviço",tipo:"textarea",placeholder:"Descreva o serviço realizado"}
-]}
-};
-function getModelo(tipo){ return MODELOS_LAUDO[tipo] || MODELOS_LAUDO["Outro"]; }
-function renderCamposDinamicos(valores){
-valores = valores || {};
-const tipo = $("i-tipo").value;
-const modelo = getModelo(tipo);
-$("info-modelo").textContent = modelo.descricao || "";
-let h = `<h3>Parâmetros — ${esc(tipo)}</h3><div class="grid">`;
-(modelo.extras||[]).forEach(c=>{
-let val = valores[c.id];
-if(val==null || val==="") val = c.tipo==="select" ? (c.opcoes[0]||"Não informado") : "";
-const id = "ex-"+c.id;
-if(c.tipo==="select"){
-h += `<div><label>${esc(c.rotulo)}</label><select id="${id}">`+c.opcoes.map(o=>`<option ${o===val?"selected":""}>${esc(o)}</option>`).join("")+`</select></div>`;
-}else if(c.tipo==="textarea"){
-h += `<div><label>${esc(c.rotulo)}</label><textarea id="${id}" placeholder="${esc(c.placeholder||"")}">${esc(val)}</textarea></div>`;
-}else{
-h += `<div><label>${esc(c.rotulo)}</label><input id="${id}" value="${esc(val)}" placeholder="${esc(c.placeholder||"")}"></div>`;
-}
-});
-h += `</div><button type="button" class="sec" id="btn-texto-padrao">Usar texto objetivo padrão</button><p class="aviso">Modelo auxiliar. Confira a norma vigente e adapte. Nada valida conformidade automaticamente.</p>`;
-$("campos-dinamicos").innerHTML = h;
-$("btn-texto-padrao").onclick = ()=>{ $("i-t-objetivo").value = modelo.objetivo_padrao || ""; };
-}
-function coletarExtras(){
-const modelo = getModelo($("i-tipo").value);
-const out = {};
-(modelo.extras||[]).forEach(c=>{
-const el = $("ex-"+c.id);
-if(!el) return;
-let vv = el.value.trim();
-if(!vv || vv==="Não informado") out[c.id]=null;
-else out[c.id]=vv;
-});
-return out;
-}
+  const sb = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
-async function mostrarPainel(){ $("area-login").hidden=true; $("painel").hidden=false; $("btn-sair").hidden=false; await carregarClientes(); await carregarInspecoes(); }
-function esconderPainel(){ $("area-login").hidden=false; $("painel").hidden=true; $("btn-sair").hidden=true; }
-$("form-login").addEventListener("submit", async e=>{
-e.preventDefault();
-const {error} = await sb.auth.signInWithPassword({email:$("email").value.trim(),password:$("senha").value});
-if(error) return aviso($("login-msg"),"Não foi possível entrar: "+error.message,"erro");
-$("senha").value=""; limpaAviso($("login-msg")); mostrarPainel();
-});
-$("btn-sair").addEventListener("click", async ()=>{ await sb.auth.signOut(); location.reload(); });
-(async ()=>{ const {data:{session}} = await sb.auth.getSession(); if(session) mostrarPainel(); else esconderPainel(); })();
-function abrirAba(qual){ const cli=qual==="clientes"; $("aba-clientes").hidden=!cli; $("aba-inspecoes").hidden=cli; $("tab-clientes").classList.toggle("ativa",cli); $("tab-inspecoes").classList.toggle("ativa",!cli); }
-$("tab-clientes").onclick=()=>abrirAba("clientes");
-$("tab-inspecoes").onclick=()=>abrirAba("inspecoes");
+  const $ = id => document.getElementById(id);
+  const v = id => $(id).value.trim() || null;
 
-async function carregarClientes(){
-const {data,error} = await sb.from("clientes").select("*").order("criado_em",{ascending:false});
-if(error) return aviso($("cliente-msg"),"Erro ao carregar clientes: "+error.message,"erro");
-clientes=data||[];
-$("lista-clientes").innerHTML=clientes.length?clientes.map(c=>`<div class="item"><strong>${esc(c.nome)}</strong><br>Telefone: ${txt(c.telefone)} · E-mail: ${txt(c.email)}<br>Endereço: ${txt(c.endereco)}</div>`).join(""):"<p class='aviso'>Nenhum cliente cadastrado.</p>";
-$("i-cliente").innerHTML=clientes.map(c=>`<option value="${c.id}">${esc(c.nome)}</option>`).join("");
-}
-$("form-cliente").addEventListener("submit", async e=>{
-e.preventDefault();
-const user=await usuarioAtual();
-if(!user) return aviso($("cliente-msg"),"Sessão expirada. Entre novamente.","erro");
-const {error}=await sb.from("clientes").insert({owner_id:user.id,nome:v("c-nome"),documento:v("c-documento"),telefone:v("c-telefone"),email:v("c-email"),endereco:v("c-endereco"),tipo_imovel:v("c-tipo")});
-if(error) return aviso($("cliente-msg"),"Erro ao salvar cliente: "+error.message,"erro");
-e.target.reset(); await carregarClientes(); aviso($("cliente-msg"),"Cliente salvo.");
-});
+  let clientes = [];
+  let inspecoes = [];
+  let inspecaoAtual = null;
+  let camposRenderizados = [];
 
-async function carregarInspecoes(){
-const {data,error}=await sb.from("inspecoes").select("*").order("criado_em",{ascending:false});
-if(error) return aviso($("inspecao-msg"),"Erro ao carregar inspeções: "+error.message,"erro");
-inspecoes=data||[]; renderInspecoes();
-}
-function nomeCliente(id){ const c=clientes.find(x=>x.id===id); return c?c.nome:"Cliente não encontrado"; }
-function badge(status){ return status==="Finalizado"?`<span class="badge final">FINALIZADO</span>`:`<span class="badge rasc">RASCUNHO</span>`; }
-function renderInspecoes(){
-$("lista-inspecoes").innerHTML=inspecoes.length?inspecoes.map(i=>`<div class="item"><strong>${esc(nomeCliente(i.cliente_id))}</strong> ${badge(i.status)}<br>${esc(i.tipo_laudo||"Tipo não informado")} · ${dataBR(i.data_vistoria)}<div><button class="sec" onclick="editarInspecao('${i.id}')">Editar</button><button class="sec" onclick="abrirFotos('${i.id}')">Fotos</button><button class="leve" onclick="gerarRelatorio('${i.id}')">Relatório / PDF</button>${i.status==="Finalizado"?`<button class="leve" onclick="alterarStatus('${i.id}','Rascunho')">Voltar a rascunho</button>`:`<button onclick="alterarStatus('${i.id}','Finalizado')">Finalizar laudo</button>`}</div></div>`).join(""):"<p class='aviso'>Nenhuma inspeção cadastrada.</p>";
-}
-function setVal(id,valor){ $(id).value=valor??""; }
-function editarInspecao(id){
-const i=inspecoes.find(x=>x.id===id); if(!i) return;
-$("i-id").value=i.id;
-setVal("i-cliente",i.cliente_id);
-setVal("i-data",(i.data_vistoria||"").slice(0,10));
-setVal("i-tipo",i.tipo_laudo||"Laudo elétrico");
-renderCamposDinamicos(i.dados_extra||{});
-setVal("i-m-tensao",i.med_tensao);
-setVal("i-m-corrente",i.med_corrente);
-setVal("i-m-aterramento",i.med_aterramento);
-setVal("i-m-isolamento",i.med_isolamento);
-setVal("i-m-instrumento",i.med_instrumento);
-setVal("i-t-objetivo",i.texto_objetivo);
-setVal("i-t-naoconf",i.texto_naoconf);
-setVal("i-t-conclusao",i.texto_conclusao);
-$("titulo-form-insp").textContent="Editar inspeção";
-abrirAba("inspecoes"); abrirFotos(id);
-window.scrollTo({top:0,behavior:"smooth"});
-}
-function limparFormInspecao(){ $("form-inspecao").reset(); $("i-id").value=""; $("titulo-form-insp").textContent="Nova inspeção"; limpaAviso($("inspecao-msg")); renderCamposDinamicos({}); }
-$("i-cancelar").onclick=limparFormInspecao;
-$("form-inspecao").addEventListener("submit", async e=>{
-e.preventDefault();
-if(!$("i-cliente").value) return aviso($("inspecao-msg"),"Cadastre um cliente primeiro.","erro");
-const id=$("i-id").value;
-const dados={cliente_id:$("i-cliente").value,data_vistoria:v("i-data"),tipo_laudo:$("i-tipo").value,med_tensao:v("i-m-tensao"),med_corrente:v("i-m-corrente"),med_aterramento:v("i-m-aterramento"),med_isolamento:v("i-m-isolamento"),med_instrumento:v("i-m-instrumento"),texto_objetivo:v("i-t-objetivo"),texto_naoconf:v("i-t-naoconf"),texto_conclusao:v("i-t-conclusao")};
-const dados_extra=coletarExtras();
-let res;
-if(id){
-res=await sb.from("inspecoes").update({...dados,dados_extra}).eq("id",id).select();
-if(res.error && /dados_extra/i.test(res.error.message)){
-res=await sb.from("inspecoes").update(dados).eq("id",id).select();
-if(!res.error) alert("Execute o SQL da coluna dados_extra para salvar os parâmetros específicos.");
-}
-}else{
-const user=await usuarioAtual();
-if(!user) return aviso($("inspecao-msg"),"Sessão expirada. Entre novamente.","erro");
-res=await sb.from("inspecoes").insert({...dados,status:"Rascunho",owner_id:user.id,dados_extra}).select();
-if(res.error && /dados_extra/i.test(res.error.message)){
-res=await sb.from("inspecoes").insert({...dados,status:"Rascunho",owner_id:user.id}).select();
-if(!res.error) alert("Execute o SQL da coluna dados_extra para salvar os parâmetros específicos.");
-}
-}
-if(res.error) return aviso($("inspecao-msg"),"Erro ao salvar inspeção: "+res.error.message,"erro");
-if(!res.data||!res.data.length) return aviso($("inspecao-msg"),"Nada foi salvo. Verifique se a inspeção pertence a esta conta.","erro");
-await carregarInspecoes();
-if(!id){ limparFormInspecao(); abrirFotos(res.data[0].id); }
-aviso($("inspecao-msg"),"Inspeção salva.");
-});
-async function alterarStatus(id,novo){
-const pergunta=novo==="Finalizado"?"Confirma que este laudo foi revisado pelo responsável técnico? O PDF deixará de exibir RASCUNHO.":"Voltar este laudo para RASCUNHO?";
-if(!confirm(pergunta)) return;
-const {data,error}=await sb.from("inspecoes").update({status:novo}).eq("id",id).select();
-if(error||!data||!data.length) return alert("Não foi possível alterar o status. "+(error?error.message:"Verifique as permissões."));
-await carregarInspecoes(); alert("Status alterado para "+novo+".");
-}
-async function abrirFotos(id){
-inspecaoAtual=id;
-const i=inspecoes.find(x=>x.id===id);
-$("fotos-titulo").textContent=i?`${nomeCliente(i.cliente_id)} · ${dataBR(i.data_vistoria)}`:id;
-$("area-fotos").hidden=false; limpaAviso($("foto-msg")); await listarFotos();
-}
-async function urlFoto(caminho){
-if(!caminho) return "";
-if(/^https?:\/\//.test(caminho)) return caminho;
-const {data,error}=await sb.storage.from(STORAGE_BUCKET).createSignedUrl(caminho,3600);
-return error?"":data.signedUrl;
-}
-async function listarFotos(){
-const {data,error}=await sb.from("fotos").select("*").eq("inspecao_id",inspecaoAtual).order("criado_em");
-if(error) return aviso($("foto-msg"),"Erro ao carregar fotos: "+error.message,"erro");
-const lista=data||[];
-if(!lista.length){ $("lista-fotos").innerHTML="<p class='aviso'>Nenhuma foto nesta inspeção.</p>"; return; }
-const urls=await Promise.all(lista.map(f=>urlFoto(f.url)));
-$("lista-fotos").innerHTML=lista.map((f,n)=>`<div>${urls[n]?`<img src="${urls[n]}" alt="${esc(f.legenda||"Foto")}">`:"<p class='aviso'>Imagem indisponível</p>"}<small>${txt(f.legenda)}</small><button class="perigo" onclick="excluirFoto('${f.id}','${esc(f.url)}')">Excluir</button></div>`).join("");
-}
-async function excluirFoto(id,caminho){
-if(!confirm("Excluir esta foto do laudo?")) return;
-if(caminho && !/^https?:\/\//.test(caminho)){ await sb.storage.from(STORAGE_BUCKET).remove([caminho]); }
-const {error}=await sb.from("fotos").delete().eq("id",id);
-if(error) return aviso($("foto-msg"),"Erro ao excluir foto: "+error.message,"erro");
-listarFotos();
-}
-$("btn-enviar-foto").onclick=async ()=>{
-if(!inspecaoAtual) return aviso($("foto-msg"),"Selecione uma inspeção primeiro.","erro");
-const arquivo=$("foto-arquivo").files[0];
-if(!arquivo) return aviso($("foto-msg"),"Escolha uma imagem.","erro");
-if(arquivo.size>10*1024*1024) return aviso($("foto-msg"),"A imagem passa de 10 MB.","erro");
-aviso($("foto-msg"),"Enviando...");
-const user=await usuarioAtual();
-if(!user) return aviso($("foto-msg"),"Sessão expirada. Entre novamente.","erro");
-const ext=(arquivo.name.split(".").pop()||"jpg").toLowerCase().replace(/[^a-z0-9]/g,"")||"jpg";
-const caminho=`${user.id}/${inspecaoAtual}/${Date.now()}.${ext}`;
-const up=await sb.storage.from(STORAGE_BUCKET).upload(caminho,arquivo,{contentType:arquivo.type,upsert:false});
-if(up.error) return aviso($("foto-msg"),"Erro ao enviar a imagem: "+up.error.message,"erro");
-const {error}=await sb.from("fotos").insert({inspecao_id:inspecaoAtual,url:caminho,legenda:v("foto-legenda"),owner_id:user.id});
-if(error) return aviso($("foto-msg"),"Erro ao registrar a foto: "+error.message,"erro");
-$("foto-arquivo").value=""; $("foto-legenda").value="";
-await listarFotos(); aviso($("foto-msg"),"Foto enviada.");
-};
-async function gerarRelatorio(id){
-const {data:i,error}=await sb.from("inspecoes").select("*").eq("id",id).single();
-if(error) return alert("Erro ao buscar a inspeção: "+error.message);
-const cliente=clientes.find(c=>c.id===i.cliente_id)||{};
-const {data:fotos}=await sb.from("fotos").select("*").eq("inspecao_id",id).order("criado_em");
-const lista=fotos||[];
-const urls=await Promise.all(lista.map(f=>urlFoto(f.url)));
-const rascunho=i.status!=="Finalizado";
-const modeloRel=getModelo(i.tipo_laudo||"Outro");
-const extrasRel=(i.dados_extra&&typeof i.dados_extra==="object")?i.dados_extra:{};
-const identificacao=[["Cliente",cliente.nome],["Documento",cliente.documento],["Endereço",cliente.endereco],["Tipo de imóvel",cliente.tipo_imovel],["Tipo de laudo",i.tipo_laudo],["Data da vistoria",dataBR(i.data_vistoria)]];
-const medicoes=[["Tensão",i.med_tensao],["Corrente",i.med_corrente],["Aterramento",i.med_aterramento],["Isolamento",i.med_isolamento],["Instrumento",i.med_instrumento]];
-const linhasExtras=(modeloRel.extras||[]).map(c=>[c.rotulo,extrasRel[c.id]]);
-const html=`<!DOCTYPE html><html lang="pt-BR"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>Relatório - ${esc(cliente.nome||"")}</title><style>body{font-family:Arial,sans-serif;color:#1d2939;max-width:820px;margin:0 auto;padding:20px;font-size:14px}header{border-bottom:3px solid #0B2545;padding-bottom:10px;margin-bottom:14px}h1{font-size:18px;color:#0B2545;margin:0}h2{font-size:15px;color:#0B2545;border-bottom:1px solid #d0d5dd;padding-bottom:4px;margin-top:20px}table{width:100%;border-collapse:collapse}td{border:1px solid #d0d5dd;padding:6px;vertical-align:top}td.r{width:32%;background:#f2f4f7;font-weight:bold}.status{font-weight:bold;padding:8px 10px;margin:10px 0;text-align:center;border:2px solid}.rasc{color:#93370d;border-color:#93370d;background:#fef0c7}.final{color:#067647;border-color:#067647;background:#d1fadf}.fotos{display:grid;grid-template-columns:1fr 1fr;gap:10px}.fotos img{width:100%;border:1px solid #d0d5dd}.fotos p{margin:2px 0 10px;font-size:12px}.texto{white-space:pre-wrap}.assinatura{margin-top:60px;text-align:center}.assinatura div{border-top:1px solid #000;width:320px;margin:0 auto;padding-top:4px}.botao{background:#0B2545;color:#fff;border:0;padding:10px 16px;border-radius:6px;cursor:pointer;margin-bottom:14px}@media print{.botao{display:none}}</style></head><body><button class="botao" onclick="window.print()">Imprimir / Salvar PDF</button><header><h1>Leandro AP Engenharia Elétrica AD</h1><div>Responsável técnico: Leandro Aparecido Pereira Paes</div><div>Atendimento na região de São Paulo</div></header><div class="status ${rascunho?"rasc":"final"}">${rascunho?"RASCUNHO — REVISAR E VALIDAR TECNICAMENTE ANTES DE QUALQUER EMISSÃO":"FINALIZADO PELO RESPONSÁVEL TÉCNICO"}</div><h2>Identificação</h2><table>${identificacao.map(([a,b])=>`<tr><td class="r">${a}</td><td>${a==="Data da vistoria"?b:txt(b)}</td></tr>`).join("")}</table><h2>Parâmetros específicos — ${esc(i.tipo_laudo||"")}</h2><table>${linhasExtras.map(([a,b])=>`<tr><td class="r">${esc(a)}</td><td>${txt(b)}</td></tr>`).join("")}</table><h2>Medições gerais</h2><table>${medicoes.map(([a,b])=>`<tr><td class="r">${a}</td><td>${txt(b)}</td></tr>`).join("")}</table><h2>Objetivo</h2><div class="texto">${txt(i.texto_objetivo)}</div><h2>Constatações / não conformidades</h2><div class="texto">${txt(i.texto_naoconf)}</div><h2>Conclusão</h2><div class="texto">${txt(i.texto_conclusao)}</div><h2>Fotografias</h2><div class="fotos">${lista.length?lista.map((f,n)=>urls[n]?`<div><img src="${urls[n]}"><p>${txt(f.legenda)}</p></div>`:"").join(""):"<p>Nenhuma fotografia.</p>"}</div><div class="assinatura"><div>Assinatura do responsável técnico</div></div></body></html>`;
-const w=window.open("","_blank");
-if(!w) return alert("O navegador bloqueou a janela. Permita pop-ups e tente novamente.");
-w.document.open(); w.document.write(html); w.document.close();
-}
-$("i-tipo").addEventListener("change", ()=>{
-renderCamposDinamicos({});
-const m=getModelo($("i-tipo").value);
-if(!$("i-t-objetivo").value.trim() && m.objetivo_padrao) $("i-t-objetivo").value=m.objetivo_padrao;
-});
-renderCamposDinamicos({});
+  function esc(x){
+    return String(x ?? "").replace(/[&<>"']/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+  }
+  function txt(x){ return x && String(x).trim() ? esc(x) : "Não informado"; }
+  function dataBR(d){
+    if (!d) return "Não informado";
+    const p = String(d).slice(0,10).split("-");
+    return p.length === 3 ? `${p[2]}/${p[1]}/${p[0]}` : esc(d);
+  }
+  function aviso(el, texto, tipo = "ok"){
+    el.innerHTML = `<div class="msg ${tipo}">${esc(texto)}</div>`;
+  }
+  function limpaAviso(el){ el.innerHTML = ""; }
+  async function usuarioAtual(){
+    const { data: { user } } = await sb.auth.getUser();
+    return user;
+  }
+
+  /* =========================================================
+     ROTEIROS POR TIPO DE LAUDO
+     Campos: r=rotulo, t=tx|nu|dt|ar|sl, u=unidade, o=opcoes, d=dica
+     Roteiro de apoio — verificar edição vigente das normas.
+     ========================================================= */
+  const AVISO_NORMA = "Roteiro de apoio técnico. Verifique a edição vigente da norma em fontes oficiais; o preenchimento não valida automaticamente a conformidade.";
+  const TEMPLOS = {
+    "SPDA": {
+      norma: "SPDA — referência: ABNT NBR 5419 (verificar edição vigente). " + AVISO_NORMA,
+      secoes: [
+        { titulo: "Sistema de proteção (captores e descidas)", campos: [
+          { r: "Tipo de captor", t: "sl", o: ["Franklin / mastro", "Passivo (gaiola)", "Ativo (ESE)", "Misto", "Outro"] },
+          { r: "Quantidade de captores/mastos", t: "nu", u: "unidades" },
+          { r: "Altura dos mastos", t: "nu", u: "m" },
+          { r: "Tipo de descida", t: "sl", o: ["Cabo de cobre", "Cabo de aço galvanizado", "Fita de cobre", "Outro"] },
+          { r: "Número de descidas", t: "nu", u: "unidades" },
+          { r: "Seção do cabo de descida", t: "tx", u: "mm²", d: "Informe conforme projeto" }
+        ]},
+        { titulo: "Aterramento do SPDA", campos: [
+          { r: "Tipo de eletrodo", t: "sl", o: ["Hastes verticais", "Anel periférico", "Malha", "Placas", "Combinação"] },
+          { r: "Número de hastes/eletrodos", t: "nu", u: "unidades" },
+          { r: "Resistência de aterramento medida", t: "nu", u: "Ω" },
+          { r: "Método de medição", t: "sl", o: ["Terrômetro - 3 pontos", "Terrômetro - queda de potencial", "Clamp", "Outro"] },
+          { r: "Valor limite de referência do projeto", t: "nu", u: "Ω", d: "Informe o valor exigido no projeto/norma aplicável" }
+        ]},
+        { titulo: "DPS — Dispositivo de proteção contra surtos", campos: [
+          { r: "Possui DPS instalado", t: "sl", o: ["Sim", "Não"] },
+          { r: "Tipo de DPS", t: "sl", o: ["Tipo 1", "Tipo 2", "Tipo 1+2", "Tipo 3", "Outro"] },
+          { r: "Nível de proteção Up", t: "nu", u: "kV" },
+          { r: "Localização", t: "tx", d: "Ex.: quadro geral de entrada" }
+        ]},
+        { titulo: "Inspeção visual", campos: [
+          { r: "Estado dos captores e mastos", t: "ar" },
+          { r: "Estado das descidas (continuidade visual)", t: "ar" },
+          { r: "Conexões, emendas e bornes", t: "ar" },
+          { r: "Equipotencialização (ligações ao aterramento)", t: "ar" },
+          { r: "Fixação, corrosão ePaint pintura", t: "ar" },
+          { r: "Sinalização e acesso aos componentes", t: "ar" }
+        ]},
+        { titulo: "Documentação e prazos", campos: [
+          { r: "Projeto do SPDA disponível e atualizado", t: "sl", o: ["Sim", "Não", "Desatualizado"] },
+          { r: "Data da última inspeção", t: "dt" },
+          { r: "Próxima inspeção prevista", t: "dt" }
+        ]}
+      ]
+    },
+    "Laudo elétrico": {
+      norma: "Instalações elétricas de baixa tensão — referência: ABNT NBR 5410 (verificar edição vigente). " + AVISO_NORMA,
+      secoes: [
+        { titulo: "Quadro de distribuição", campos: [
+          { r: "Quantidade de circuitos", t: "nu", u: "unidades" },
+          { r: "Estado geral do quadro", t: "sl", o: ["Bom", "Regular", "Ruim"] },
+          { r: "Disjuntores identificados por circuito", t: "sl", o: ["Sim", "Parcialmente", "Não"] },
+          { r: "Bitola dos condutores principais", t: "tx", u: "mm²" },
+          { r: "Disjuntor DR instalado", t: "sl", o: ["Sim", "Não", "Parcial"] },
+          { r: "Tipo do DR", t: "tx", d: "Ex.: tetrapolar 30 mA" }
+        ]},
+        { titulo: "Instalações e pontos", campos: [
+          { r: "Pontos de tomada em conformidade", t: "sl", o: ["Sim", "Parcialmente", "Não"] },
+          { r: "Interruptores em conformidade", t: "sl", o: ["Sim", "Parcialmente", "Não"] },
+          { r: "Iluminação adequada aos ambientes", t: "sl", o: ["Sim", "Parcialmente", "Não"] },
+          { r: "Condutores compatíveis com a proteção (disjuntores)", t: "sl", o: ["Sim", "Não", "Não foi possível verificar"] }
+        ]},
+        { titulo: "Aterramento e equipotencialização", campos: [
+          { r: "Sistema de aterramento", t: "sl", o: ["TN-S", "TN-C", "TN-C-S", "TT", "IT", "Não identificado"] },
+          { r: "Resistência de aterramento medida", t: "nu", u: "Ω" },
+          { r: "Ligações de equipotencialização principal", t: "ar" },
+          { r: "Ligações de equipotencialização suplementar", t: "ar" }
+        ]},
+        { titulo: "Medições no ponto de entrega", campos: [
+          { r: "Tensão fase-fase (V)", t: "tx", u: "V", d: "Informe AB / BC / CA se medido" },
+          { r: "Tensão fase-neutro (V)", t: "tx", u: "V" },
+          { r: "Tensão neutro-terra (V)", t: "tx", u: "V" },
+          { r: "Corrente por fase (A)", t: "tx", u: "A", d: "R / S / T" },
+          { r: "Resistência de isolamento (MΩ)", t: "nu", u: "MΩ" }
+        ]},
+        { titulo: "Entrada de energia", campos: [
+          { r: "Padrão de entrada", t: "tx", d: "Ex.: bifásico/trifásico, aérea/subterrânea" },
+          { r: "Concessionária", t: "tx" },
+          { r: "Medidor em boas condições", t: "sl", o: ["Sim", "Não"] }
+        ]}
+      ]
+    },
+    "Inspeção NR-10": {
+      norma: "Segurança em instalações e serviços em eletricidade — referência: NR-10 (verificar edição vigente no MTE). " + AVISO_NORMA,
+      secoes: [
+        { titulo: "Documentação (Prontuário das Instalações Elétricas)", campos: [
+          { r: "PIE elaborado e atualizado", t: "sl", o: ["Sim", "Não", "Em elaboração"] },
+          { r: "Diagrama unifilar atualizado", t: "sl", o: ["Sim", "Não"] },
+          { r: "Memorial descritivo das instalações", t: "sl", o: ["Sim", "Não"] },
+          { r: "Especificação de EPI e EPC", t: "sl", o: ["Sim", "Não"] },
+          { r: "Procedimentos de trabalho (operacionalização)", t: "sl", o: ["Sim", "Parcial", "Não"] },
+          { r: "Ordens de serviço elaboradas", t: "sl", o: ["Sim", "Não"] },
+          { r: "APR — Análise Preliminar de Risco disponível", t: "sl", o: ["Sim", "Não"] }
+        ]},
+        { titulo: "Pessoas e treinamentos", campos: [
+          { r: "Quantidade de trabalhadores autorizados", t: "nu", u: "pessoas" },
+          { r: "Treinamento NR-10 dentro da validade", t: "sl", o: ["Sim", "Parcialmente", "Não"] },
+          { r: "Certificados de treinamento disponíveis", t: "sl", o: ["Sim", "Não"] }
+        ]},
+        { titulo: "Procedimentos de segurança em interventions", campos: [
+          { r: "Procedimento de desenergização e bloqueio", t: "sl", o: ["Sim", "Não"] },
+          { r: "Teste de ausência de tensão", t: "sl", o: ["Sim", "Não"] },
+          { r: "Aterramento temporário", t: "sl", o: ["Sim", "Não"] },
+          { r: "Isolamento e sinalização da área", t: "sl", o: ["Sim", "Não"] }
+        ]},
+        { titulo: "Condições das instalações e equipamentos", campos: [
+          { r: "Quadros elétricos em boas condições", t: "sl", o: ["Sim", "Parcialmente", "Não"] },
+          { r: "Cabos e extensões em boas condições", t: "sl", o: ["Sim", "Parcialmente", "Não"] },
+          { r: "Tomadas e plugues em boas condições", t: "sl", o: ["Sim", "Parcialmente", "Não"] },
+          { r: "Iluminação de emergência funcional", t: "sl", o: ["Sim", "Não", "Não se aplica"] },
+          { r: "EPI/EPC adequados e em quantidade suficiente", t: "sl", o: ["Sim", "Parcialmente", "Não"] }
+        ]},
+        { titulo: "Responsáveis", campos: [
+          { r: "Responsável pela execução do serviço", t: "tx" },
+          { r: "Responsável técnico pela instalação", t: "tx" }
+        ]}
+      ]
+    },
+    "Termografia": {
+      norma: "Inspeção termográfica — roteiro de apoio técnico (normas de referência applicables conforme contrato; verificar edição vigente). " + AVISO_NORMA,
+      secoes: [
+        { titulo: "Condições da inspeção", campos: [
+          { r: "Equipamento / quadro inspecionado", t: "tx" },
+          { r: "Circuito / carga no momento", t: "tx", u: "% da carga nominal" },
+          { r: "Temperatura ambiente", t: "nu", u: "°C" },
+          { r: "Emissividade configurada na câmera", t: "nu", d: "Ex.: 0,95" },
+          { r: "Distância do ponto inspecionado", t: "nu", u: "m" }
+        ]},
+        { titulo: "Resultados", campos: [
+          { r: "Pontos inspecionados", t: "nu", u: "pontos" },
+          { r: "Pontos com anomalia térmica", t: "nu", u: "pontos" },
+          { r: "Temperatura máxima encontrada", t: "nu", u: "°C" },
+          { r: "Temperatura de referência (ponto similar sadio)", t: "nu", u: "°C" },
+          { r: "Delta T (diferença)", t: "nu", u: "°C" },
+          { r: "Classificação da anomalia mais crítica", t: "sl", o: ["Normal", "Moderada", "Grave", "Crítica / urgente"] }
+        ]},
+        { titulo: "Ações", campos: [
+          { r: "Recomendações técnicas", t: "ar" },
+          { r: "Prazo sugerido para correção", t: "tx" },
+          { r: "Data prevista para reinspeção", t: "dt" }
+        ]}
+      ]
+    },
+    "Medições elétricas": {
+      norma: "Medições elétricas — roteiro de apoio técnico (referências: NBR 5410 e normas de medição aplicáveis; verificar edição vigente). " + AVISO_NORMA,
+      secoes: [
+        { titulo: "Tensões", campos: [
+          { r: "Tensão AB (V)", t: "nu", u: "V" },
+          { r: "Tensão BC (V)", t: "nu", u: "V" },
+          { r: "Tensão CA (V)", t: "nu", u: "V" },
+          { r: "Tensão fase-neutro R/S/T (V)", t: "tx", u: "V" },
+          { r: "Tensão neutro-terra (V)", t: "nu", u: "V" }
+        ]},
+        { titulo: "Correntes", campos: [
+          { r: "Corrente fase R (A)", t: "nu", u: "A" },
+          { r: "Corrente fase S (A)", t: "nu", u: "A" },
+          { r: "Corrente fase T (A)", t: "nu", u: "A" },
+          { r: "Corrente no neutro (A)", t: "nu", u: "A" },
+          { r: "Desequilíbrio de corrente", t: "nu", u: "%" }
+        ]},
+        { titulo: "Aterramento e isolamento", campos: [
+          { r: "Resistência de aterramento", t: "nu", u: "Ω" },
+          { r: "Método de medição", t: "sl", o: ["Terrômetro 3 pontos", "Queda de potencial", "Clamp", "Outro"] },
+          { r: "Resistência de isolamento", t: "nu", u: "MΩ" },
+          { r: "Tensão de teste do isolamento", t: "nu", u: "V" },
+          { r: "Circuito testado", t: "tx" }
+        ]},
+        { titulo: "Qualidade de energia (se medido)", campos: [
+          { r: "Fator de potência", t: "nu", d: "Ex.: 0,92" },
+          { r: "THD de tensão", t: "nu", u: "%" },
+          { r: "Frequência medida", t: "nu", u: "Hz" }
+        ]}
+      ]
+    },
+    "Projeto elétrico": {
+      norma: "Projeto de instalações elétricas — referência: ABNT NBR 5410 e normas da concessionária (verificar edição vigente). " + AVISO_NORMA,
+      secoes: [
+        { titulo: "Documentos do projeto", campos: [
+          { r: "Memorial descritivo elaborado", t: "sl", o: ["Sim", "Não", "Em elaboração"] },
+          { r: "Plantas baixa com pontos elétricos", t: "sl", o: ["Sim", "Não"] },
+          { r: "Diagrama unifilar", t: "sl", o: ["Sim", "Não"] },
+          { r: "Memória de cálculo de demanda", t: "sl", o: ["Sim", "Não"] },
+          { r: "ART do projeto emitida", t: "sl", o: ["Sim", "Não", "Em emissão"] },
+          { r: "Número da ART (se já emitida)", t: "tx", d: "Informe somente se já existir" }
+        ]},
+        { titulo: "Dados da instalación", campos: [
+          { r: "Carga instalada", t: "nu", u: "kVA" },
+          { r: "Demanda calculada", t: "nu", u: "kVA" },
+          { r: "Padrão de entrada previsto", t: "tx" },
+          { r: "Concessionária", t: "tx" }
+        ]}
+      ]
+    },
+    "Consultoria técnica": {
+      norma: "Consultoria técnica — roteiro de apoio; definir referências normativas no contrato (verificar edições vigentes). " + AVISO_NORMA,
+      secoes: [
+        { titulo: "Objeto", campos: [
+          { r: "Objeto da consultoria", t: "ar" },
+          { r: "Normas e referências aplicáveis", t: "ar", d: "Ex.: NBR 5410, NBR 5419, NR-10 — verificar edição vigente" },
+          { r: "Documentos ricevuti / fornecidos", t: "ar" }
+        ]},
+        { titulo: "Diagnóstico e recomendações", campos: [
+          { r: "Diagnóstico da situação atual", t: "ar" },
+          { r: "Recomendações técnicas", t: "ar" },
+          { r: "Prazo sugerido para implantação", t: "tx" },
+          { r: "Estimativa de custos (se aplicável)", t: "tx" }
+        ]}
+      ]
+    }
+  };
+
+  /* ---------- RENDERIZAÇÃO DINÂMICA ---------- */
+  function renderTemplate(tipo, valoresMap){
+    const t = TEMPLOS[tipo];
+    camposRenderizados = [];
+    const cont = $("campos-dinamicos");
+    const ref = $("norma-ref");
+    if (!t) { cont.innerHTML = ""; ref.hidden = true; return; }
+    ref.hidden = false;
+    ref.textContent = t.norma;
+    let html = "";
+    t.secoes.forEach((s, si) => {
+      html += `<h3>${esc(s.titulo)}</h3><div class="grid">`;
+      s.campos.forEach((c, ci) => {
+        const id = `cd-${si}-${ci}`;
+        camposRenderizados.push({ id, secao: s.titulo, campo: c.r });
+        const val = valoresMap && valoresMap[c.r] ? valoresMap[c.r] : "";
+        let input = "";
+        if (c.t === "ar") {
+          input = `<textarea id="${id}">${esc(val)}</textarea>`;
+        } else if (c.t === "sl") {
+          input = `<select id="${id}"><option value="">Selecione</option>${c.o.map(o => `<option ${val===o?"selected":""}>${esc(o)}</option>`).join("")}</select>`;
+        } else if (c.t === "dt") {
+          input = `<input id="${id}" type="date" value="${esc(val)}">`;
+        } else if (c.t === "nu") {
+          input = `<input id="${id}" type="number" step="any" value="${esc(val)}">`;
+        } else {
+          input = `<input id="${id}" type="text" value="${esc(val)}">`;
+        }
+        html += `<div><label>${esc(c.r)}${c.u ? ` (${esc(c.u)})` : ""}</label>${input}${c.d ? `<small class="dica">${esc(c.d)}</small>` : ""}</div>`;
+      });
+      html += `</div>`;
+    });
+    cont.innerHTML = html;
+  }
+
+  function coletarCamposDinamicos(){
+    return camposRenderizados.map(c => ({
+      secao: c.secao,
+      campo: c.campo,
+      valor: $(c.id).value.trim()
+    }));
+  }
+
+  function mapaValores(camposJson){
+    const m = {};
+    (camposJson || []).forEach(x => { m[x.campo] = x.valor; });
+    return m;
+  }
+
+  $("i-tipo").addEventListener("change", () => renderTemplate($("i-tipo").value, null));
+
+  /* ---------- LOGIN ---------- */
+  async function mostrarPainel(){
+    $("area-login").hidden = true;
+    $("painel").hidden = false;
+    $("btn-sair").hidden = false;
+    renderTemplate($("i-tipo").value, null);
+    await carregarClientes();
+    await carregarInspecoes();
+  }
+  function esconderPainel(){
+    $("area-login").hidden = false;
+    $("painel").hidden = true;
+    $("btn-sair").hidden = true;
+  }
+
+  $("form-login").addEventListener("submit", async e => {
+    e.preventDefault();
+    const { error } = await sb.auth.signInWithPassword({
+      email: $("email").value.trim(),
+      password: $("senha").value
+    });
+    if (error) return aviso($("login-msg"), "Não foi possível entrar: " + error.message, "erro");
+    $("senha").value = "";
+    limpaAviso($("login-msg"));
+    mostrarPainel();
+  });
+
+  $("btn-sair").addEventListener("click", async () => {
+    await sb.auth.signOut();
+    location.reload();
+  });
+
+  (async () => {
+    const { data: { session } } = await sb.auth.getSession();
+    if (session) mostrarPainel(); else esconderPainel();
+  })();
+
+  /* ---------- ABAS ---------- */
+  function abrirAba(qual){
+    const cli = qual === "clientes";
+    $("aba-clientes").hidden = !cli;
+    $("aba-inspecoes").hidden = cli;
+    $("tab-clientes").classList.toggle("ativa", cli);
+    $("tab-inspecoes").classList.toggle("ativa", !cli);
+  }
+  $("tab-clientes").onclick = () => abrirAba("clientes");
+  $("tab-inspecoes").onclick = () => abrirAba("inspecoes");
+
+  /* ---------- CLIENTES ---------- */
+  async function carregarClientes(){
+    const { data, error } = await sb.from("clientes").select("*").order("criado_em", { ascending: false });
+    if (error) return aviso($("cliente-msg"), "Erro ao carregar clientes: " + error.message, "erro");
+    clientes = data || [];
+    $("lista-clientes").innerHTML = clientes.length
+      ? clientes.map(c => `
+          <div class="item">
+            <strong>${esc(c.nome)}</strong><br>
+            Telefone: ${txt(c.telefone)} · E-mail: ${txt(c.email)}<br>
+            Endereço: ${txt(c.endereco)}
+          </div>`).join("")
+      : "<p class='aviso'>Nenhum cliente cadastrado.</p>";
+    $("i-cliente").innerHTML = clientes.map(c => `<option value="${c.id}">${esc(c.nome)}</option>`).join("");
+  }
+
+  $("form-cliente").addEventListener("submit", async e => {
+    e.preventDefault();
+    const formulario = e.target;
+    const user = await usuarioAtual();
+    const { error } = await sb.from("clientes").insert({
+      owner_id: user.id,
+      nome: v("c-nome"),
+      documento: v("c-documento"),
+      telefone: v("c-telefone"),
+      email: v("c-email"),
+      endereco: v("c-endereco"),
+      tipo_imovel: v("c-tipo")
+    });
+    if (error) return aviso($("cliente-msg"), "Erro ao salvar cliente: " + error.message, "erro");
+    formulario.reset();
+    await carregarClientes();
+    aviso($("cliente-msg"), "Cliente salvo.");
+  });
+
+  /* ---------- INSPEÇÕES ---------- */
+  async function carregarInspecoes(){
+    const { data, error } = await sb.from("inspecoes").select("*").order("criado_em", { ascending: false });
+    if (error) return aviso($("inspecao-msg"), "Erro ao carregar inspeções: " + error.message, "erro");
+    inspecoes = data || [];
+    renderInspecoes();
+  }
+
+  function nomeCliente(id){
+    const c = clientes.find(x => x.id === id);
+    return c ? c.nome : "Cliente não encontrado";
+  }
+  function badge(status){
+    return status === "Finalizado"
+      ? `<span class="badge final">FINALIZADO</span>`
+      : `<span class="badge rasc">RASCUNHO</span>`;
+  }
+
+  function renderInspecoes(){
+    $("lista-inspecoes").innerHTML = inspecoes.length
+      ? inspecoes.map(i => `
+          <div class="item">
+            <strong>${esc(nomeCliente(i.cliente_id))}</strong> ${badge(i.status)}<br>
+            ${esc(i.tipo_laudo || "Tipo não informado")} · ${dataBR(i.data_vistoria)}
+            <div>
+              <button class="sec" onclick="editarInspecao('${i.id}')">Editar</button>
+              <button class="sec" onclick="abrirFotos('${i.id}')">Fotos</button>
+              <button class="leve" onclick="gerarRelatorio('${i.id}')">Relatório / PDF</button>
+              ${i.status === "Finalizado"
+                ? `<button class="leve" onclick="alterarStatus('${i.id}','Rascunho')">Voltar a rascunho</button>`
+                : `<button onclick="alterarStatus('${i.id}','Finalizado')">Finalizar laudo</button>`}
+            </div>
+          </div>`).join("")
+      : "<p class='aviso'>Nenhuma inspeção cadastrada.</p>";
+  }
+
+  function setVal(id, valor){ $(id).value = valor ?? ""; }
+
+  function editarInspecao(id){
+    const i = inspecoes.find(x => x.id === id);
+    if (!i) return;
+    $("i-id").value = i.id;
+    setVal("i-cliente", i.cliente_id);
+    setVal("i-data", (i.data_vistoria || "").slice(0,10));
+    setVal("i-tipo", i.tipo_laudo);
+    renderTemplate(i.tipo_laudo, mapaValores(i.campos_json));
+    setVal("i-m-tensao", i.med_tensao);
+    setVal("i-m-corrente", i.med_corrente);
+    setVal("i-m-aterramento", i.med_aterramento);
+    setVal("i-m-isolamento", i.med_isolamento);
+    setVal("i-m-instrumento", i.med_instrumento);
+    setVal("i-t-objetivo", i.texto_objetivo);
+    setVal("i-t-naoconf", i.texto_naoconf);
+    setVal("i-t-conclusao", i.texto_conclusao);
+    $("titulo-form-insp").textContent = "Editar inspeção";
+    abrirAba("inspecoes");
+    abrirFotos(id);
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  }
+
+  function limparFormInspecao(){
+    $("form-inspecao").reset();
+    $("i-id").value = "";
+    $("titulo-form-insp").textContent = "Nova inspeção";
+    renderTemplate($("i-tipo").value, null);
+    limpaAviso($("inspecao-msg"));
+  }
+  $("i-cancelar").onclick = limparFormInspecao;
+
+  $("form-inspecao").addEventListener("submit", async e => {
+    e.preventDefault();
+    const id = $("i-id").value;
+    const dados = {
+      cliente_id: $("i-cliente").value,
+      data_vistoria: v("i-data"),
+      tipo_laudo: $("i-tipo").value,
+      campos_json: coletarCamposDinamicos(),
+      med_tensao: v("i-m-tensao"),
+      med_corrente: v("i-m-corrente"),
+      med_aterramento: v("i-m-aterramento"),
+      med_isolamento: v("i-m-isolamento"),
+      med_instrumento: v("i-m-instrumento"),
+      texto_objetivo: v("i-t-objetivo"),
+      texto_naoconf: v("i-t-naoconf"),
+      texto_conclusao: v("i-t-conclusao")
+    };
+
+    let res;
+    if (id) {
+      res = await sb.from("inspecoes").update(dados).eq("id", id).select();
+    } else {
+      const user = await usuarioAtual();
+      res = await sb.from("inspecoes").insert({ ...dados, status: "Rascunho", owner_id: user.id }).select();
+    }
+
+    if (res.error) return aviso($("inspecao-msg"), "Erro ao salvar inspeção: " + res.error.message, "erro");
+    if (!res.data || !res.data.length) {
+      return aviso($("inspecao-msg"), "Nada foi salvo. Verifique se a inspeção pertence a esta conta.", "erro");
+    }
+
+    await carregarInspecoes();
+    if (!id) {
+      limparFormInspecao();
+      abrirFotos(res.data[0].id);
+    }
+    aviso($("inspecao-msg"), "Inspeção salva.");
+  });
+
+  /* ---------- FINALIZAR / VOLTAR A RASCUNHO ---------- */
+  async function alterarStatus(id, novo){
+    const pergunta = novo === "Finalizado"
+      ? "Confirma que este laudo foi revisado pelo responsável técnico? O PDF deixará de exibir RASCUNHO."
+      : "Voltar este laudo para RASCUNHO?";
+    if (!confirm(pergunta)) return;
+
+    const { data, error } = await sb.from("inspecoes").update({ status: novo }).eq("id", id).select();
+    if (error || !data || !data.length) {
+      return alert("Não foi possível alterar o status. " + (error ? error.message : "Verifique as permissões."));
+    }
+    await carregarInspecoes();
+    alert("Status alterado para " + novo + ".");
+  }
+
+  /* ---------- FOTOS ---------- */
+  async function abrirFotos(id){
+    inspecaoAtual = id;
+    const i = inspecoes.find(x => x.id === id);
+    $("fotos-titulo").textContent = i ? `${nomeCliente(i.cliente_id)} · ${dataBR(i.data_vistoria)}` : id;
+    $("area-fotos").hidden = false;
+    limpaAviso($("foto-msg"));
+    await listarFotos();
+  }
+
+  async function urlFoto(caminho){
+    if (!caminho) return "";
+    if (/^https?:\/\//.test(caminho)) return caminho;
+    const { data, error } = await sb.storage.from(STORAGE_BUCKET).createSignedUrl(caminho, 3600);
+    return error ? "" : data.signedUrl;
+  }
+
+  async function listarFotos(){
+    const { data, error } = await sb.from("fotos").select("*").eq("inspecao_id", inspecaoAtual).order("criado_em");
+    if (error) return aviso($("foto-msg"), "Erro ao carregar fotos: " + error.message, "erro");
+    const lista = data || [];
+    if (!lista.length) {
+      $("lista-fotos").innerHTML = "<p class='aviso'>Nenhuma foto nesta inspeção.</p>";
+      return;
+    }
+    const urls = await Promise.all(lista.map(f => urlFoto(f.url)));
+    $("lista-fotos").innerHTML = lista.map((f, n) => `
+      <div>
+        ${urls[n] ? `<img src="${urls[n]}" alt="${esc(f.legenda || "Foto")}">` : "<p class='aviso'>Imagem indisponível</p>"}
+        <small>${txt(f.legenda)}</small>
+        <button class="perigo" onclick="excluirFoto('${f.id}','${esc(f.url)}')">Excluir</button>
+      </div>`).join("");
+  }
+
+  async function excluirFoto(id, caminho){
+    if (!confirm("Excluir esta foto do laudo?")) return;
+    if (caminho && !/^https?:\/\//.test(caminho)) {
+      await sb.storage.from(STORAGE_BUCKET).remove([caminho]);
+    }
+    const { error } = await sb.from("fotos").delete().eq("id", id);
+    if (error) return aviso($("foto-msg"), "Erro ao excluir foto: " + error.message, "erro");
+    listarFotos();
+  }
+
+  $("btn-enviar-foto").onclick = async () => {
+    if (!inspecaoAtual) return aviso($("foto-msg"), "Selecione uma inspeção primeiro.", "erro");
+    const arquivo = $("foto-arquivo").files[0];
+    if (!arquivo) return aviso($("foto-msg"), "Escolha uma imagem.", "erro");
+    if (arquivo.size > 10 * 1024 * 1024) return aviso($("foto-msg"), "A imagem passa de 10 MB.", "erro");
+
+    aviso($("foto-msg"), "Enviando...");
+    const user = await usuarioAtual();
+    const ext = (arquivo.name.split(".").pop() || "jpg").toLowerCase().replace(/[^a-z0-9]/g, "") || "jpg";
+    const caminho = `${user.id}/${inspecaoAtual}/${Date.now()}.${ext}`;
+
+    const up = await sb.storage.from(STORAGE_BUCKET).upload(caminho, arquivo, {
+      contentType: arquivo.type,
+      upsert: false
+    });
+    if (up.error) return aviso($("foto-msg"), "Erro ao enviar a imagem: " + up.error.message, "erro");
+
+    const { error } = await sb.from("fotos").insert({
+      inspecao_id: inspecaoAtual,
+      url: caminho,
+      legenda: v("foto-legenda"),
+      owner_id: user.id
+    });
+    if (error) return aviso($("foto-msg"), "Erro ao registrar a foto: " + error.message, "erro");
+
+    $("foto-arquivo").value = "";
+    $("foto-legenda").value = "";
+    await listarFotos();
+    aviso($("foto-msg"), "Foto enviada.");
+  };
+
+  /* ---------- RELATÓRIO ---------- */
+  const LOGO_INLINE = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 120" width="64" height="64">
+    <defs>
+      <linearGradient id="rb" x1="0" y1="0" x2="1" y2="1">
+        <stop offset="0" stop-color="#16406D"/><stop offset="0.55" stop-color="#0B2545"/><stop offset="1" stop-color="#0A3B47"/>
+      </linearGradient>
+      <linearGradient id="rr" x1="0" y1="0" x2="0" y2="1">
+        <stop offset="0" stop-color="#FFFFFF"/><stop offset="1" stop-color="#8FEDE6"/>
+      </linearGradient>
+      <radialGradient id="rh" cx="0.5" cy="0.5" r="0.5">
+        <stop offset="0" stop-color="#1FA3A3" stop-opacity="0.55"/><stop offset="1" stop-color="#1FA3A3" stop-opacity="0"/>
+      </radialGradient>
+    </defs>
+    <rect width="120" height="120" rx="28" fill="url(#rb)"/>
+    <circle cx="60" cy="60" r="50" fill="none" stroke="#fff" stroke-opacity="0.18" stroke-width="1.5"/>
+    <circle cx="60" cy="60" r="40" fill="url(#rh)"/>
+    <path d="M74 14 L34 70 H57 L46 106 L88 48 H65 Z" fill="url(#rr)"/>
+  </svg>`;
+
+  async function gerarRelatorio(id){
+    const { data: i, error } = await sb.from("inspecoes").select("*").eq("id", id).single();
+    if (error) return alert("Erro ao buscar a inspeção: " + error.message);
+
+    const cliente = clientes.find(c => c.id === i.cliente_id) || {};
+    const { data: fotos } = await sb.from("fotos").select("*").eq("inspecao_id", id).order("criado_em");
+    const lista = fotos || [];
+    const urls = await Promise.all(lista.map(f => urlFoto(f.url)));
+    const rascunho = i.status !== "Finalizado";
+
+    const identificacao = [
+      ["Cliente", cliente.nome],
+      ["Documento", cliente.documento],
+      ["Endereço", cliente.endereco],
+      ["Tipo de imóvel", cliente.tipo_imovel],
+      ["Tipo de laudo", i.tipo_laudo],
+      ["Data da vistoria", dataBR(i.data_vistoria)]
+    ];
+    const medicoes = [
+      ["Tensão", i.med_tensao],
+      ["Corrente", i.med_corrente],
+      ["Aterramento", i.med_aterramento],
+      ["Isolamento", i.med_isolamento],
+      ["Instrumento", i.med_instrumento]
+    ];
+
+    const grupos = {};
+    (i.campos_json || []).forEach(x => {
+      if (!x || !x.campo) return;
+      (grupos[x.secao] = grupos[x.secao] || []).push(x);
+    });
+    const secoesDinamicas = Object.keys(grupos).map(sec => `
+      <h2>${esc(sec)}</h2>
+      <table>${grupos[sec].map(x => `<tr><td class="r">${esc(x.campo)}</td><td>${txt(x.valor)}</td></tr>`).join("")}</table>
+    `).join("");
+
+    const html = `<!DOCTYPE html>
+<html lang="pt-BR"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Relatório - ${esc(cliente.nome || "")}</title>
+<style>
+  body{font-family:Arial,sans-serif;color:#1d2939;max-width:820px;margin:0 auto;padding:20px;font-size:14px}
+  header{border-bottom:3px solid #0B2545;padding-bottom:10px;margin-bottom:14px}
+  table.logo{width:100%;border:0}
+  table.logo td{border:0;padding:0;vertical-align:middle}
+  h1{font-size:18px;color:#0B2545;margin:0}
+  h2{font-size:15px;color:#0B2545;border-bottom:1px solid #d0d5dd;padding-bottom:4px;margin-top:20px}
+  table{width:100%;border-collapse:collapse}
+  td{border:1px solid #d0d5dd;padding:6px;vertical-align:top}
+  td.r{width:32%;background:#f2f4f7;font-weight:bold}
+  .status{font-weight:bold;padding:8px 10px;margin:10px 0;text-align:center;border:2px solid}
+  .rasc{color:#93370d;border-color:#93370d;background:#fef0c7}
+  .final{color:#067647;border-color:#067647;background:#d1fadf}
+  .fotos{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+  .fotos img{width:100%;border:1px solid #d0d5dd}
+  .fotos p{margin:2px 0 10px;font-size:12px}
+  .texto{white-space:pre-wrap}
+  .assinatura{margin-top:60px;text-align:center}
+  .assinatura div{border-top:1px solid #000;width:320px;margin:0 auto;padding-top:4px}
+  .botao{background:#0B2545;color:#fff;border:0;padding:10px 16px;border-radius:6px;cursor:pointer;margin-bottom:14px}
+  @media print{.botao{display:none}}
+</style></head>
+<body>
+  <button class="botao" onclick="window.print()">Imprimir / Salvar PDF</button>
+  <header>
+    <table class="logo"><tr>
+      <td style="width:74px">${LOGO_INLINE}</td>
+      <td>
+        <h1>Leandro AP Engenharia Elétrica AD</h1>
+        <div>Responsável técnico: Leandro Aparecido Pereira Paes</div>
+        <div>Atendimento na região de São Paulo</div>
+      </td>
+    </tr></table>
+  </header>
+  <div class="status ${rascunho ? "rasc" : "final"}">
+    ${rascunho ? "RASCUNHO — REVISAR E VALIDAR TECNICAMENTE ANTES DE QUALQUER EMISSÃO" : "FINALIZADO PELO RESPONSÁVEL TÉCNICO"}
+  </div>
+
+  <h2>Identificação</h2>
+  <table>${identificacao.map(([a,b]) => `<tr><td class="r">${a}</td><td>${a === "Data da vistoria" ? b : txt(b)}</td></tr>`).join("")}</table>
+
+  ${secoesDinamicas}
+
+  <h2>Medições gerais</h2>
+  <table>${medicoes.map(([a,b]) => `<tr><td class="r">${a}</td><td>${txt(b)}</td></tr>`).join("")}</table>
+
+  <h2>Objetivo</h2>
+  <div class="texto">${txt(i.texto_objetivo)}</div>
+
+  <h2>Constatações / não conformidades</h2>
+  <div class="texto">${txt(i.texto_naoconf)}</div>
+
+  <h2>Conclusão</h2>
+  <div class="texto">${txt(i.texto_conclusao)}</div>
+
+  <h2>Fotografias</h2>
+  <div class="fotos">
+    ${lista.length
+      ? lista.map((f, n) => urls[n] ? `<div><img src="${urls[n]}"><p>${txt(f.legenda)}</p></div>` : "").join("")
+      : "<p>Nenhuma fotografia.</p>"}
+  </div>
+
+  <p style="font-size:11px;color:#667085">Roteiro baseado em referências normativas; verificar a edição vigente em fontes oficiais. Este documento não substitui a análise do responsável técnico.</p>
+
+  <div class="assinatura"><div>Assinatura do responsável técnico</div></div>
+</body></html>`;
+
+    const w = window.open("", "_blank");
+    if (!w) return alert("O navegador bloqueou a janela. Permita pop-ups e tente novamente.");
+    w.document.open();
+    w.document.write(html);
+    w.document.close();
+  }
 </script>
 </body>
 </html>
